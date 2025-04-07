@@ -1,0 +1,157 @@
+<?php 
+
+// Exit if accessed directly
+if (!defined('ABSPATH')) exit;
+
+// Get user favorites table
+function jufl_get_favorites_db() {
+    global $wpdb;
+    $table_name = esc_sql($wpdb->prefix . 'jufl_user_favorites');
+    return $table_name;
+}
+
+// Get user likes table
+function jufl_get_likes_db() {
+    global $wpdb;
+    $table_name = esc_sql($wpdb->prefix . 'jufl_user_likes');
+    return $table_name;
+}
+
+// Get user favorites count
+function jufl_get_favorites_count($user_id) {
+    global $wpdb;
+    $table_name = jufl_get_favorites_db();
+    $count = $wpdb->get_var($wpdb->prepare("SELECT COUNT(*) FROM $table_name WHERE user_id = %d", $user_id));
+    return $count;
+}
+
+// Get user likes count
+function jufl_get_likes_count($post_id) {
+    global $wpdb;
+    $table_name = jufl_get_likes_db();
+    $count = $wpdb->get_var($wpdb->prepare("SELECT COUNT(*) FROM $table_name WHERE post_id = %d", $post_id));
+    return $count;
+}
+
+// Get user favorites
+function jufl_get_favorites($user_id) {
+    global $wpdb;
+    $table_name = jufl_get_favorites_db();
+    $favorites = $wpdb->get_results($wpdb->prepare("SELECT post_id FROM $table_name WHERE user_id = %d", $user_id));
+    return $favorites;
+}
+
+// Get user likes
+function jufl_get_likes($user_id) {
+    global $wpdb;
+    $table_name = jufl_get_likes_db();
+    $likes = $wpdb->get_results($wpdb->prepare("SELECT post_id FROM $table_name WHERE user_id = %d", $user_id));
+    return $likes;
+}
+
+// Add user favorite
+function jufl_add_favorite($user_id, $post_id) {
+    global $wpdb;
+    $table_name = jufl_get_favorites_db();
+    $wpdb->insert($table_name, array(
+        'user_id' => absint($user_id),
+        'post_id' => absint($post_id)
+    ));
+}
+
+// Remove user favorite
+function jufl_remove_favorite($user_id, $post_id) {
+    global $wpdb;
+    $table_name = jufl_get_favorites_db();
+    $wpdb->delete($table_name, array(
+        'user_id' => absint($user_id),
+        'post_id' => absint($post_id)
+    ));
+}
+
+// Toggle user favorite
+function jufl_toggle_favorite($user_id, $post_id) {
+    global $wpdb;
+    $table_name = jufl_get_favorites_db();
+    $exists = $wpdb->get_var($wpdb->prepare("SELECT COUNT(*) FROM $table_name WHERE user_id = %d AND post_id = %d", $user_id, $post_id));
+    
+    if ($exists) {
+        jufl_remove_favorite($user_id, $post_id);
+    } else {
+        jufl_add_favorite($user_id, $post_id);
+    }
+}
+// Toggle user like 
+function jufl_toggle_like($user_id, $post_id) {
+    global $wpdb;
+    $table_name = jufl_get_likes_db();
+    $exists = $wpdb->get_var($wpdb->prepare("SELECT COUNT(*) FROM $table_name WHERE user_id = %d AND post_id = %d", $user_id, $post_id));
+    
+    if ($exists) {
+        jufl_remove_like($user_id, $post_id);
+    } else {
+        jufl_add_like($user_id, $post_id);
+    }
+}
+
+// Add user like
+function jufl_add_like($user_id, $post_id) {
+    global $wpdb;
+    $table_name = jufl_get_likes_db();
+    $wpdb->insert($table_name, array(
+        'user_id' => absint($user_id),
+        'post_id' => absint($post_id)
+    ));
+}
+
+// Remove user like
+function jufl_remove_like($user_id, $post_id) {
+    global $wpdb;
+    $table_name = jufl_get_likes_db();
+    $wpdb->delete($table_name, array(
+        'user_id' => absint($user_id),
+        'post_id' => absint($post_id)
+    ));
+}
+
+// Create favorites and likes tables
+// Create user favorites table
+function jufl_user_favorites_table() {
+    global $wpdb;
+    $table_name = jufl_get_favorites_db();
+    $charset_collate = $wpdb->get_charset_collate();
+    $sql = "CREATE TABLE IF NOT EXISTS $table_name (
+        id mediumint(9) NOT NULL AUTO_INCREMENT,
+        user_id mediumint(9) NOT NULL,
+        post_id mediumint(9) NOT NULL,
+        PRIMARY KEY  (id),
+        KEY user_id (user_id),
+        KEY post_id (post_id)
+    ) $charset_collate;";
+    require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
+    dbDelta($sql);
+}
+
+// Create user likes table
+function jufl_user_likes_table() {
+    global $wpdb;
+    $table_name = jufl_get_likes_db();
+    $charset_collate = $wpdb->get_charset_collate();
+    $sql = "CREATE TABLE IF NOT EXISTS $table_name (
+        id mediumint(9) NOT NULL AUTO_INCREMENT,
+        user_id mediumint(9) NOT NULL,
+        post_id mediumint(9) NOT NULL,
+        PRIMARY KEY  (id),
+        KEY user_id (user_id),
+        KEY post_id (post_id)
+    ) $charset_collate;";
+    require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
+    dbDelta($sql);
+}
+
+// Create tables on plugin activation
+function jufl_create_tables() {
+    jufl_user_favorites_table();
+    jufl_user_likes_table();
+}
+register_activation_hook(plugin_basename(dirname(__DIR__) . '/core.php'), 'jufl_create_tables');
