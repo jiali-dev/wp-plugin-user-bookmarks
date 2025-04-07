@@ -6,6 +6,8 @@ if (!defined('ABSPATH')) exit;
 // Define Constant
 require_once( plugin_dir_path(__FILE__) . 'define_constants.php' );
 
+// Add DB functions
+require_once( JUFL_INC_PATH . '/database-functions.php');
 
 // Register theme assets
 require_once( JUFL_INC_PATH . '/register_assets.php');
