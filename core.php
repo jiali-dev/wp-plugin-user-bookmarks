@@ -11,8 +11,10 @@
  * License URI: https://www.gnu.org/licenses/gpl-2.0.html
  * Text Domain: jiali-user-favorites-and-likes
  * Domain Path: /languages
- */
+*/
 
+// Exit if accessed directly
+if (!defined('ABSPATH')) exit;
 
 // Add functions
 require_once( plugin_dir_path(__FILE__) . '/inc/functions.php' );
