@@ -7,15 +7,15 @@ if (!defined('ABSPATH')) exit;
 require_once( plugin_dir_path(__FILE__) . 'define_constants.php' );
 
 // Add DB functions
-require_once( JUFL_INC_PATH . '/database-functions.php');
+require_once( JIALIUFL_INC_PATH . '/database-functions.php');
 
 // Register theme assets
-require_once( JUFL_INC_PATH . '/register_assets.php');
+require_once( JIALIUFL_INC_PATH . '/register_assets.php');
 
 // Register front view
-require_once( JUFL_INC_PATH . '/front.php');
+require_once( JIALIUFL_INC_PATH . '/front.php');
 
 // Register settings page
-require_once( JUFL_INC_PATH . '/settings.php');
+require_once( JIALIUFL_INC_PATH . '/settings.php');
 
 ?>
