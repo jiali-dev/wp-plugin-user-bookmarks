@@ -5,9 +5,12 @@ if (!defined('ABSPATH')) exit;
 
 // Add theme assets --> Register for globaly and enqueue for specific page
 function jialiufl_register_assets() {
+    // Register Fontawesome
+    wp_register_style('jialiufl-fontawesome', JIALIUFL_ASSETS_URI . '/plugins/fontawesome/all.min.css' , array(), '6.7.2', 'all');
+    wp_register_script('jialiufl-fontawesome', JIALIUFL_ASSETS_URI . '/plugins/fontawesome/all.min.js' , array(), '6.7.2', true);
+    
     // Register styles
     wp_register_style('jialiufl-styles', JIALIUFL_CSS_URI . '/styles.css' , array(), '1.0.0', 'all');
-
     // Register scripts
     wp_register_script('jialiufl-main', JIALIUFL_JS_URI . '/main.js', array('jquery'), '1.0.0', true);
 }
