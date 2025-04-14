@@ -6,27 +6,43 @@ if (!defined('ABSPATH')) exit;
 // Get user favorites table
 function jialiufl_get_favorites_db() {
     global $wpdb;
-    $table_name = esc_sql($wpdb->prefix . 'jialiufl_user_favorites');
+    $table_name = esc_sql($wpdb->prefix . 'jialiufl_favorites');
     return $table_name;
 }
 
 // Get user likes table
 function jialiufl_get_likes_db() {
     global $wpdb;
-    $table_name = esc_sql($wpdb->prefix . 'jialiufl_user_likes');
+    $table_name = esc_sql($wpdb->prefix . 'jialiufl_likes');
     return $table_name;
 }
 
 // Get user favorites count
-function jialiufl_get_favorites_count($user_id) {
+function jialiufl_get_user_favorites_count($user_id) {
     global $wpdb;
     $table_name = jialiufl_get_favorites_db();
     $count = $wpdb->get_var($wpdb->prepare("SELECT COUNT(*) FROM $table_name WHERE user_id = %d", $user_id));
     return $count;
 }
 
+// Get post favorites count
+function jialiufl_get_post_favorites_count($post_id) {
+    global $wpdb;
+    $table_name = jialiufl_get_favorites_db();
+    $count = $wpdb->get_var($wpdb->prepare("SELECT COUNT(*) FROM $table_name WHERE post_id = %d", $post_id));
+    return $count;
+}
+
 // Get user likes count
-function jialiufl_get_likes_count($post_id) {
+function jialiufl_get_user_likes_count($user_id) {
+    global $wpdb;
+    $table_name = jialiufl_get_likes_db();
+    $count = $wpdb->get_var($wpdb->prepare("SELECT COUNT(*) FROM $table_name WHERE user_id = %d", $user_id));
+    return $count;
+}
+
+// Get user likes count
+function jialiufl_get_post_likes_count($post_id) {
     global $wpdb;
     $table_name = jialiufl_get_likes_db();
     $count = $wpdb->get_var($wpdb->prepare("SELECT COUNT(*) FROM $table_name WHERE post_id = %d", $post_id));
@@ -34,22 +50,38 @@ function jialiufl_get_likes_count($post_id) {
 }
 
 // Get user favorites
-function jialiufl_get_favorites($user_id) {
+function jialiufl_get_user_favorites($user_id) {
     global $wpdb;
     $table_name = jialiufl_get_favorites_db();
     $favorites = $wpdb->get_results($wpdb->prepare("SELECT post_id FROM $table_name WHERE user_id = %d", $user_id));
     return $favorites;
 }
 
+// Get post favorites
+function jialiufl_get_post_favorites($post_id) {
+    global $wpdb;
+    $table_name = jialiufl_get_favorites_db();
+    $favorites = $wpdb->get_results($wpdb->prepare("SELECT post_id FROM $table_name WHERE post_id = %d", $post_id));
+    return $favorites;
+}
+
 // Get user likes
-function jialiufl_get_likes($user_id) {
+function jialiufl_get_user_likes($user_id) {
     global $wpdb;
     $table_name = jialiufl_get_likes_db();
     $likes = $wpdb->get_results($wpdb->prepare("SELECT post_id FROM $table_name WHERE user_id = %d", $user_id));
     return $likes;
 }
 
-// Add user favorite
+// Get post likes
+function jialiufl_get_post_likes($post_id) {
+    global $wpdb;
+    $table_name = jialiufl_get_likes_db();
+    $likes = $wpdb->get_results($wpdb->prepare("SELECT post_id FROM $table_name WHERE post_id = %d", $post_id));
+    return $likes;
+}
+
+// Add favorite
 function jialiufl_add_favorite($user_id, $post_id) {
     global $wpdb;
     $table_name = jialiufl_get_favorites_db();
@@ -59,7 +91,7 @@ function jialiufl_add_favorite($user_id, $post_id) {
     ));
 }
 
-// Remove user favorite
+// Remove favorite
 function jialiufl_remove_favorite($user_id, $post_id) {
     global $wpdb;
     $table_name = jialiufl_get_favorites_db();
@@ -69,7 +101,7 @@ function jialiufl_remove_favorite($user_id, $post_id) {
     ));
 }
 
-// Toggle user favorite
+// Toggle favorite
 function jialiufl_toggle_favorite($user_id, $post_id) {
     global $wpdb;
     $table_name = jialiufl_get_favorites_db();
@@ -81,7 +113,28 @@ function jialiufl_toggle_favorite($user_id, $post_id) {
         jialiufl_add_favorite($user_id, $post_id);
     }
 }
-// Toggle user like 
+
+// Add like
+function jialiufl_add_like($user_id, $post_id) {
+    global $wpdb;
+    $table_name = jialiufl_get_likes_db();
+    $wpdb->insert($table_name, array(
+        'user_id' => absint($user_id),
+        'post_id' => absint($post_id)
+    ));
+}
+
+// Remove like
+function jialiufl_remove_like($user_id, $post_id) {
+    global $wpdb;
+    $table_name = jialiufl_get_likes_db();
+    $wpdb->delete($table_name, array(
+        'user_id' => absint($user_id),
+        'post_id' => absint($post_id)
+    ));
+}
+
+// Toggle like 
 function jialiufl_toggle_like($user_id, $post_id) {
     global $wpdb;
     $table_name = jialiufl_get_likes_db();
@@ -94,29 +147,9 @@ function jialiufl_toggle_like($user_id, $post_id) {
     }
 }
 
-// Add user like
-function jialiufl_add_like($user_id, $post_id) {
-    global $wpdb;
-    $table_name = jialiufl_get_likes_db();
-    $wpdb->insert($table_name, array(
-        'user_id' => absint($user_id),
-        'post_id' => absint($post_id)
-    ));
-}
-
-// Remove user like
-function jialiufl_remove_like($user_id, $post_id) {
-    global $wpdb;
-    $table_name = jialiufl_get_likes_db();
-    $wpdb->delete($table_name, array(
-        'user_id' => absint($user_id),
-        'post_id' => absint($post_id)
-    ));
-}
-
 // Create favorites and likes tables
 // Create user favorites table
-function jialiufl_user_favorites_table() {
+function jialiufl_favorites_table() {
     global $wpdb;
     $table_name = jialiufl_get_favorites_db();
     $charset_collate = $wpdb->get_charset_collate();
@@ -133,7 +166,7 @@ function jialiufl_user_favorites_table() {
 }
 
 // Create user likes table
-function jialiufl_user_likes_table() {
+function jialiufl_likes_table() {
     global $wpdb;
     $table_name = jialiufl_get_likes_db();
     $charset_collate = $wpdb->get_charset_collate();
@@ -151,7 +184,7 @@ function jialiufl_user_likes_table() {
 
 // Create tables on plugin activation
 function jialiufl_create_tables() {
-    jialiufl_user_favorites_table();
-    jialiufl_user_likes_table();
+    jialiufl_favorites_table();
+    jialiufl_likes_table();
 }
 register_activation_hook(plugin_basename(dirname(__DIR__) . '/core.php'), 'jialiufl_create_tables');
