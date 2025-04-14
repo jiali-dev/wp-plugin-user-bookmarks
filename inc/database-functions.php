@@ -3,17 +3,95 @@
 // Exit if accessed directly
 if (!defined('ABSPATH')) exit;
 
-// Get user favorites table
-function jialiufl_get_favorites_db() {
-    global $wpdb;
-    $table_name = esc_sql($wpdb->prefix . 'jialiufl_favorites');
-    return $table_name;
-}
-
+// Likes functions
 // Get user likes table
 function jialiufl_get_likes_db() {
     global $wpdb;
     $table_name = esc_sql($wpdb->prefix . 'jialiufl_likes');
+    return $table_name;
+}
+
+// Get user likes count
+function jialiufl_get_user_likes_count($user_id) {
+    global $wpdb;
+    $table_name = jialiufl_get_likes_db();
+    $count = $wpdb->get_var($wpdb->prepare("SELECT COUNT(*) FROM $table_name WHERE user_id = %d", $user_id));
+    return $count;
+}
+
+// Get user likes count
+function jialiufl_get_post_likes_count($post_id) {
+    global $wpdb;
+    $table_name = jialiufl_get_likes_db();
+    $count = $wpdb->get_var($wpdb->prepare("SELECT COUNT(*) FROM $table_name WHERE post_id = %d", $post_id));
+    return $count;
+}
+
+// Get user likes
+function jialiufl_get_user_likes($user_id) {
+    global $wpdb;
+    $table_name = jialiufl_get_likes_db();
+    $likes = $wpdb->get_results($wpdb->prepare("SELECT post_id FROM $table_name WHERE user_id = %d", $user_id));
+    return $likes;
+}
+
+// Get post likes
+function jialiufl_get_post_likes($post_id) {
+    global $wpdb;
+    $table_name = jialiufl_get_likes_db();
+    $likes = $wpdb->get_results($wpdb->prepare("SELECT post_id FROM $table_name WHERE post_id = %d", $post_id));
+    return $likes;
+}
+
+// Exist user post like
+function jialiufl_user_post_like_exist($user_id, $post_id) {
+    global $wpdb;
+    $table_name = jialiufl_get_likes_db();
+    $exists = $wpdb->get_var($wpdb->prepare("SELECT COUNT(*) FROM $table_name WHERE user_id = %d AND post_id = %d", $user_id, $post_id));
+    return $exists > 0;
+}
+
+
+// Add like
+function jialiufl_add_like($user_id, $post_id) {
+    global $wpdb;
+    $table_name = jialiufl_get_likes_db();
+    $insert = $wpdb->insert($table_name, array(
+        'user_id' => absint($user_id),
+        'post_id' => absint($post_id)
+    ));
+    return $insert;
+}
+
+// Remove like
+function jialiufl_remove_like($user_id, $post_id) {
+    global $wpdb;
+    $table_name = jialiufl_get_likes_db();
+    $delete = $wpdb->delete($table_name, array(
+        'user_id' => absint($user_id),
+        'post_id' => absint($post_id)
+    ));
+    return $delete;
+}
+
+// Toggle like 
+function jialiufl_toggle_like($user_id, $post_id) {
+
+    $exists =jialiufl_user_post_like_exist($user_id, $post_id);
+
+    if ($exists) {
+        $result = jialiufl_remove_like($user_id, $post_id);
+    } else {
+        $result = jialiufl_add_like($user_id, $post_id);
+    }
+    return $result;
+}
+
+// Favorite functions
+// Get user favorites table
+function jialiufl_get_favorites_db() {
+    global $wpdb;
+    $table_name = esc_sql($wpdb->prefix . 'jialiufl_favorites');
     return $table_name;
 }
 
@@ -29,22 +107,6 @@ function jialiufl_get_user_favorites_count($user_id) {
 function jialiufl_get_post_favorites_count($post_id) {
     global $wpdb;
     $table_name = jialiufl_get_favorites_db();
-    $count = $wpdb->get_var($wpdb->prepare("SELECT COUNT(*) FROM $table_name WHERE post_id = %d", $post_id));
-    return $count;
-}
-
-// Get user likes count
-function jialiufl_get_user_likes_count($user_id) {
-    global $wpdb;
-    $table_name = jialiufl_get_likes_db();
-    $count = $wpdb->get_var($wpdb->prepare("SELECT COUNT(*) FROM $table_name WHERE user_id = %d", $user_id));
-    return $count;
-}
-
-// Get user likes count
-function jialiufl_get_post_likes_count($post_id) {
-    global $wpdb;
-    $table_name = jialiufl_get_likes_db();
     $count = $wpdb->get_var($wpdb->prepare("SELECT COUNT(*) FROM $table_name WHERE post_id = %d", $post_id));
     return $count;
 }
@@ -65,86 +127,47 @@ function jialiufl_get_post_favorites($post_id) {
     return $favorites;
 }
 
-// Get user likes
-function jialiufl_get_user_likes($user_id) {
+// Exist user post favorite     
+function jialiufl_user_post_favorite_exist($user_id, $post_id) {
     global $wpdb;
-    $table_name = jialiufl_get_likes_db();
-    $likes = $wpdb->get_results($wpdb->prepare("SELECT post_id FROM $table_name WHERE user_id = %d", $user_id));
-    return $likes;
-}
-
-// Get post likes
-function jialiufl_get_post_likes($post_id) {
-    global $wpdb;
-    $table_name = jialiufl_get_likes_db();
-    $likes = $wpdb->get_results($wpdb->prepare("SELECT post_id FROM $table_name WHERE post_id = %d", $post_id));
-    return $likes;
+    $table_name = jialiufl_get_favorites_db();
+    $exists = $wpdb->get_var($wpdb->prepare("SELECT COUNT(*) FROM $table_name WHERE user_id = %d AND post_id = %d", $user_id, $post_id));
+    return $exists > 0;
 }
 
 // Add favorite
 function jialiufl_add_favorite($user_id, $post_id) {
     global $wpdb;
     $table_name = jialiufl_get_favorites_db();
-    $wpdb->insert($table_name, array(
+    $insert = $wpdb->insert($table_name, array(
         'user_id' => absint($user_id),
         'post_id' => absint($post_id)
     ));
+    return $insert;
 }
 
 // Remove favorite
 function jialiufl_remove_favorite($user_id, $post_id) {
     global $wpdb;
     $table_name = jialiufl_get_favorites_db();
-    $wpdb->delete($table_name, array(
+    $delete = $wpdb->delete($table_name, array(
         'user_id' => absint($user_id),
         'post_id' => absint($post_id)
     ));
+    return $delete;
 }
 
 // Toggle favorite
 function jialiufl_toggle_favorite($user_id, $post_id) {
-    global $wpdb;
-    $table_name = jialiufl_get_favorites_db();
-    $exists = $wpdb->get_var($wpdb->prepare("SELECT COUNT(*) FROM $table_name WHERE user_id = %d AND post_id = %d", $user_id, $post_id));
-    
+
+    $exists = jialiufl_user_post_favorite_exist($user_id, $post_id);
+
     if ($exists) {
-        jialiufl_remove_favorite($user_id, $post_id);
+        $result = jialiufl_remove_favorite($user_id, $post_id);
     } else {
-        jialiufl_add_favorite($user_id, $post_id);
+        $result = jialiufl_add_favorite($user_id, $post_id);
     }
-}
-
-// Add like
-function jialiufl_add_like($user_id, $post_id) {
-    global $wpdb;
-    $table_name = jialiufl_get_likes_db();
-    $wpdb->insert($table_name, array(
-        'user_id' => absint($user_id),
-        'post_id' => absint($post_id)
-    ));
-}
-
-// Remove like
-function jialiufl_remove_like($user_id, $post_id) {
-    global $wpdb;
-    $table_name = jialiufl_get_likes_db();
-    $wpdb->delete($table_name, array(
-        'user_id' => absint($user_id),
-        'post_id' => absint($post_id)
-    ));
-}
-
-// Toggle like 
-function jialiufl_toggle_like($user_id, $post_id) {
-    global $wpdb;
-    $table_name = jialiufl_get_likes_db();
-    $exists = $wpdb->get_var($wpdb->prepare("SELECT COUNT(*) FROM $table_name WHERE user_id = %d AND post_id = %d", $user_id, $post_id));
-    
-    if ($exists) {
-        jialiufl_remove_like($user_id, $post_id);
-    } else {
-        jialiufl_add_like($user_id, $post_id);
-    }
+    return $result;
 }
 
 // Create favorites and likes tables
