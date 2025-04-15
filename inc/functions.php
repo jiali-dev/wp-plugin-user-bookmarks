@@ -18,4 +18,10 @@ require_once( JIALIUFL_INC_PATH . '/front.php');
 // Register settings page
 require_once( JIALIUFL_INC_PATH . '/settings.php');
 
+// Register shortcodes 
+require_once( JIALIUFL_INC_PATH . '/shortcodes.php');
+
+// Register ajax function
+require_once( JIALIUFL_INC_PATH . '/ajax-functions.php');
+
 ?>

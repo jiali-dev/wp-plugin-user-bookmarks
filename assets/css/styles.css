@@ -1,1 +1,24 @@
+.jialiufl-favorite-and-like {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    align-items: center;
+    justify-content: flex-start;
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+    font-size: inherit;
+    color: inherit;
+}
 
+.jialiufl-favorite-and-like span {
+    cursor: pointer;
+    transition: color 0.3s ease;
+}
+
+.jialiufl-favorite-and-like span:hover {
+    color: #e63946; /* Highlight color on hover */
+}
+
+.jialiufl-favorite-and-like-button-active {
+    color: #e63946;
+}
