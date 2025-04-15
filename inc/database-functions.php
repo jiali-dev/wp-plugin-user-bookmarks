@@ -97,6 +97,14 @@ function jialiufl_get_favorites_db() {
     return $table_name;
 }
 
+// Get favorites
+function jialiufl_get_favorites() {
+    global $wpdb;
+    $table_name = jialiufl_get_favorites_db();
+    $results = $wpdb->get_results($wpdb->prepare("SELECT post_id FROM $table_name"));
+    return $results;
+}
+
 // Get user favorites count
 function jialiufl_get_user_favorites_count($user_id) {
     global $wpdb;
