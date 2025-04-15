@@ -24,4 +24,7 @@ require_once( JIALIUFL_INC_PATH . '/shortcodes.php');
 // Register ajax function
 require_once( JIALIUFL_INC_PATH . '/ajax-functions.php');
 
+// Register ajax function
+require_once( JIALIUFL_INC_PATH . '/classes/Jialiufl_Posts_Table.php');
+
 ?>

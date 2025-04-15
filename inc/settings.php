@@ -1,4 +1,5 @@
 <?php
+
 // Exit if accessed directly
 if (!defined('ABSPATH')) exit;
 
@@ -177,13 +178,31 @@ function jialiufl_button_position_field() {
  * Liked Posts Page
  */
 function jialiufl_liked_posts_page() {
-    echo '<div class="wrap"><h1>' . esc_html__('Liked Posts', 'jiali-user-favorites-and-likes') . '</h1><p>' . esc_html__('List of liked posts will appear here.', 'jiali-user-favorites-and-likes') . '</p></div>';
+    
+    $user_id = get_current_user_id(); 
+    $liked_post_ids = jialiufl_get_user_likes($user_id); // must return array of post IDs
+
+    $table = new Jialiufl_Posts_List_Table([
+        'post_ids' => $liked_post_ids,
+        'title'    => 'Liked Posts',
+    ]);
+
+    $table->render_table();
 }
 
 /**
  * Favorite Posts Page
  */
 function jialiufl_favorite_posts_page() {
-    echo '<div class="wrap"><h1>' . esc_html__('Favorite Posts', 'jiali-user-favorites-and-likes') . '</h1><p>' . esc_html__('List of favorite posts will appear here.', 'jiali-user-favorites-and-likes') . '</p></div>';
+    $user_id = get_current_user_id();
+    $fav_post_ids = jialiufl_get_user_favorites($user_id);
+
+    $table = new Jialiufl_Posts_List_Table([
+        'post_ids' => $fav_post_ids,
+        'title'    => 'Favorited Posts',
+    ]);
+
+    $table->render_table();
 }
+
 ?>

@@ -31,8 +31,10 @@ function jialiufl_get_post_likes_count($post_id) {
 function jialiufl_get_user_likes($user_id) {
     global $wpdb;
     $table_name = jialiufl_get_likes_db();
-    $likes = $wpdb->get_results($wpdb->prepare("SELECT post_id FROM $table_name WHERE user_id = %d", $user_id));
-    return $likes;
+    $results = $wpdb->get_col(
+        $wpdb->prepare("SELECT post_id FROM $table_name WHERE user_id = %d", $user_id)
+    );
+    return $results;
 }
 
 // Get post likes
@@ -115,8 +117,10 @@ function jialiufl_get_post_favorites_count($post_id) {
 function jialiufl_get_user_favorites($user_id) {
     global $wpdb;
     $table_name = jialiufl_get_favorites_db();
-    $favorites = $wpdb->get_results($wpdb->prepare("SELECT post_id FROM $table_name WHERE user_id = %d", $user_id));
-    return $favorites;
+    $results = $wpdb->get_col(
+        $wpdb->prepare("SELECT post_id FROM $table_name WHERE user_id = %d", $user_id)
+    );
+    return $results;
 }
 
 // Get post favorites
