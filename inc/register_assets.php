@@ -9,6 +9,11 @@ function jialiufl_register_assets() {
     wp_register_style('jialiufl-fontawesome', JIALIUFL_ASSETS_URI . '/plugins/fontawesome/all.min.css' , array(), '6.7.2', 'all');
     wp_register_script('jialiufl-fontawesome', JIALIUFL_ASSETS_URI . '/plugins/fontawesome/all.min.js' , array(), '6.7.2', true);
     
+    // Register Notiflix
+    wp_register_style('jialiufl-notiflix', JIALIUFL_ASSETS_URI . '/plugins/notiflix/notiflix.min.css' , array(), '3.2.8', 'all');
+    wp_register_script('jialiufl-notiflix', JIALIUFL_ASSETS_URI . '/plugins/notiflix/notiflix.min.js' , array(), '3.2.8', true);
+    wp_register_script('jialiufl-notiflix-custom', JIALIUFL_ASSETS_URI . '/plugins/notiflix/notiflix-custom.js' , array(), '3.2.8', true);
+
     // Register styles
     wp_register_style('jialiufl-styles', JIALIUFL_CSS_URI . '/styles.css' , array(), '1.0.0', 'all');
     // Register scripts
