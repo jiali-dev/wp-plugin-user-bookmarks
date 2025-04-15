@@ -10,7 +10,6 @@ if (!defined('ABSPATH')) exit;
  */
 function jialiufl_buttons_shortcode($atts) {
     
-
     jialiufl_enqueue_assets();
 
     return jialiufl_get_buttons_html();

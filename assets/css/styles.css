@@ -18,3 +18,7 @@
 .jialiufl-favorite-and-like span:hover {
     color: #e63946; /* Highlight color on hover */
 }
+
+.jialiufl-favorite-and-like-button-active {
+    color: #e63946;
+}

@@ -84,7 +84,7 @@ function jialiufl_settings_page() {
  */
 function jialiufl_register_settings() {
     register_setting('jialiufl_settings_group', 'jialiufl_enabled_post_types_for_like');
-    register_setting('jialiufl_settings_group', 'jialiufl_enabled_post_types_for_fav');
+    register_setting('jialiufl_settings_group', 'jialiufl_enabled_post_types_for_favorite');
     register_setting('jialiufl_settings_group', 'jialiufl_button_position');
 
     add_settings_section(
@@ -142,13 +142,13 @@ function jialiufl_like_post_types_field() {
  * Checkbox field for Favorite post types
  */
 function jialiufl_favorite_post_types_field() {
-    $selected = get_option('jialiufl_enabled_post_types_for_fav', []);
+    $selected = get_option('jialiufl_enabled_post_types_for_favorite', []);
     $post_types = get_post_types(['public' => true], 'objects');
 
     foreach ($post_types as $type) {
         ?>
         <label>
-            <input type="checkbox" name="jialiufl_enabled_post_types_for_fav[]" value="<?php echo esc_attr($type->name); ?>"
+            <input type="checkbox" name="jialiufl_enabled_post_types_for_favorite[]" value="<?php echo esc_attr($type->name); ?>"
                 <?php checked(in_array($type->name, $selected)); ?> />
             <?php echo esc_html($type->label); ?>
         </label><br>
