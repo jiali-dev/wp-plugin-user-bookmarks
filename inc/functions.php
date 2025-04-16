@@ -7,7 +7,7 @@ if (!defined('ABSPATH')) exit;
 require_once( plugin_dir_path(__FILE__) . 'define_constants.php' );
 
 // Add DB functions
-require_once( JIALIUFL_INC_PATH . '/database-functions.php');
+require_once( JIALIUFL_INC_PATH . '/favorite-like-functions.php');
 
 // Register theme assets
 require_once( JIALIUFL_INC_PATH . '/register_assets.php');
@@ -24,7 +24,7 @@ require_once( JIALIUFL_INC_PATH . '/shortcodes.php');
 // Register ajax function
 require_once( JIALIUFL_INC_PATH . '/ajax-functions.php');
 
-// Register ajax function
-require_once( JIALIUFL_INC_PATH . '/classes/Jialiufl_Posts_Table.php');
+// Register custom table
+require_once( JIALIUFL_INC_PATH . '/classes/Jialiufl_Posts_List_Table.php');
 
 ?>

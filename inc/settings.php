@@ -1,5 +1,4 @@
 <?php
-
 // Exit if accessed directly
 if (!defined('ABSPATH')) exit;
 
@@ -19,23 +18,23 @@ add_filter('plugin_action_links_' . plugin_basename(__FILE__), 'jialiufl_add_plu
  * Add admin menu and submenus
  */
 function jialiufl_add_admin_menu() {
-    // Main menu
+    // Main menu - restricted to admins
     add_menu_page(
         esc_html__('User Favorites and Likes', 'jiali-user-favorites-and-likes'),
         esc_html__('Favorites & Likes', 'jiali-user-favorites-and-likes'),
-        'manage_options',
+        'read',
         'jialiufl-user-favorites-and-likes',
         'jialiufl_settings_page',
         'dashicons-heart',
         65
     );
 
-    // Submenu: Settings (same page as main)
+    // Submenu: Settings (same page)
     add_submenu_page(
         'jialiufl-user-favorites-and-likes',
         esc_html__('Settings', 'jiali-user-favorites-and-likes'),
         esc_html__('Settings', 'jiali-user-favorites-and-likes'),
-        'manage_options',
+        'read',
         'jialiufl-user-favorites-and-likes',
         'jialiufl_settings_page'
     );
@@ -45,7 +44,7 @@ function jialiufl_add_admin_menu() {
         'jialiufl-user-favorites-and-likes',
         esc_html__('Liked Posts', 'jiali-user-favorites-and-likes'),
         esc_html__('Liked Posts', 'jiali-user-favorites-and-likes'),
-        'manage_options',
+        'read',
         'jialiufl-liked-posts',
         'jialiufl_liked_posts_page'
     );
@@ -55,9 +54,20 @@ function jialiufl_add_admin_menu() {
         'jialiufl-user-favorites-and-likes',
         esc_html__('Favorite Posts', 'jiali-user-favorites-and-likes'),
         esc_html__('Favorite Posts', 'jiali-user-favorites-and-likes'),
-        'manage_options',
+        'read',
         'jialiufl-favorite-posts',
         'jialiufl_favorite_posts_page'
+    );
+    
+    // Submenu: Favorite Posts Report
+    // Only visible to admins
+    add_submenu_page(
+        'jialiufl-user-favorites-and-likes',
+        esc_html__('Favorite Posts Report', 'jiali-user-favorites-and-likes'),
+        esc_html__('Favorite Posts Report', 'jiali-user-favorites-and-likes'),
+        'manage_options',
+        'jialiufl-favorite-posts-report',
+        'jialiufl_favorite_posts_report_page'
     );
 }
 add_action('admin_menu', 'jialiufl_add_admin_menu');
@@ -73,6 +83,7 @@ function jialiufl_settings_page() {
             <?php
             settings_fields('jialiufl_settings_group');
             do_settings_sections('jialiufl-user-favorites-and-likes');
+            do_settings_sections('jialiufl-user-favorites-and-likes-style');
             submit_button(esc_html__('Save Changes', 'jiali-user-favorites-and-likes'));
             ?>
         </form>
@@ -84,40 +95,65 @@ function jialiufl_settings_page() {
  * Register settings
  */
 function jialiufl_register_settings() {
-    register_setting('jialiufl_settings_group', 'jialiufl_enabled_post_types_for_like');
-    register_setting('jialiufl_settings_group', 'jialiufl_enabled_post_types_for_favorite');
-    register_setting('jialiufl_settings_group', 'jialiufl_button_position');
-
-    add_settings_section(
-        'jialiufl_main_settings_section',
-        esc_html__('Enabled Post Types', 'jiali-user-favorites-and-likes'),
-        '__return_false',
-        'jialiufl-user-favorites-and-likes'
-    );
-
-    add_settings_field(
-        'jialiufl_like_enabled_post_types',
-        esc_html__('Enabled Post Types for Like', 'jiali-user-favorites-and-likes'),
-        'jialiufl_like_post_types_field',
-        'jialiufl-user-favorites-and-likes',
-        'jialiufl_main_settings_section'
-    );
-
-    add_settings_field(
-        'jialiufl_fav_enabled_post_types',
-        esc_html__('Enabled Post Types for Favorite', 'jiali-user-favorites-and-likes'),
-        'jialiufl_favorite_post_types_field',
-        'jialiufl-user-favorites-and-likes',
-        'jialiufl_main_settings_section'
-    );
-
-    add_settings_field(
+    register_setting('jialiufl_settings_group', 'jialiufl_enabled_post_types_for_like', [
+        'type' => 'array',
+        'capability' => 'manage_options',
+    ]);
+    register_setting('jialiufl_settings_group', 'jialiufl_enabled_post_types_for_favorite', [
+        'type' => 'array',
+        'capability' => 'manage_options',
+    ]);
+    register_setting(
+        'jialiufl_settings_group',
         'jialiufl_button_position',
-        esc_html__('Button Position', 'jiali-user-favorites-and-likes'),
-        'jialiufl_button_position_field',
-        'jialiufl-user-favorites-and-likes',
-        'jialiufl_main_settings_section'
+        [
+            'type' => 'string',
+            'default' => 'after',
+            'capability' => 'manage_options',
+        ]
     );
+
+    if (current_user_can('manage_options')) {
+        add_settings_section(
+            'jialiufl_main_settings_section',
+            esc_html__('Enabled Post Types', 'jiali-user-favorites-and-likes'),
+            '__return_false',
+            'jialiufl-user-favorites-and-likes'
+        );
+
+        add_settings_field(
+            'jialiufl_like_enabled_post_types',
+            esc_html__('Enabled Post Types for Like', 'jiali-user-favorites-and-likes'),
+            'jialiufl_like_post_types_field',
+            'jialiufl-user-favorites-and-likes',
+            'jialiufl_main_settings_section'
+        );
+
+        add_settings_field(
+            'jialiufl_fav_enabled_post_types',
+            esc_html__('Enabled Post Types for Favorite', 'jiali-user-favorites-and-likes'),
+            'jialiufl_favorite_post_types_field',
+            'jialiufl-user-favorites-and-likes',
+            'jialiufl_main_settings_section'
+        );
+
+        add_settings_field(
+            'jialiufl_button_position',
+            esc_html__('Button Position', 'jiali-user-favorites-and-likes'),
+            'jialiufl_button_position_field',
+            'jialiufl-user-favorites-and-likes',
+            'jialiufl_main_settings_section'
+        );
+    }
+
+    // Style section (optional access control)
+    add_settings_section(
+        'jialiufl_style_settings_section',
+        esc_html__('Style Settings', 'jiali-user-favorites-and-likes'),
+        '__return_false',
+        'jialiufl-user-favorites-and-likes-style'
+    );
+
 }
 add_action('admin_init', 'jialiufl_register_settings');
 
@@ -125,6 +161,8 @@ add_action('admin_init', 'jialiufl_register_settings');
  * Checkbox field for Like post types
  */
 function jialiufl_like_post_types_field() {
+    if (!current_user_can('manage_options')) return;
+
     $selected = get_option('jialiufl_enabled_post_types_for_like', []);
     $post_types = get_post_types(['public' => true], 'objects');
 
@@ -143,6 +181,8 @@ function jialiufl_like_post_types_field() {
  * Checkbox field for Favorite post types
  */
 function jialiufl_favorite_post_types_field() {
+    if (!current_user_can('manage_options')) return;
+
     $selected = get_option('jialiufl_enabled_post_types_for_favorite', []);
     $post_types = get_post_types(['public' => true], 'objects');
 
@@ -161,6 +201,7 @@ function jialiufl_favorite_post_types_field() {
  * Radio field for button position
  */
 function jialiufl_button_position_field() {
+    if (!current_user_can('manage_options')) return;
     $value = get_option('jialiufl_button_position', 'after');
     ?>
     <label>
@@ -178,31 +219,108 @@ function jialiufl_button_position_field() {
  * Liked Posts Page
  */
 function jialiufl_liked_posts_page() {
-    
-    $user_id = get_current_user_id(); 
-    $liked_post_ids = jialiufl_get_user_likes($user_id); // must return array of post IDs
-
-    $table = new Jialiufl_Posts_List_Table([
-        'post_ids' => $liked_post_ids,
-        'title'    => 'Liked Posts',
+    $user_id = get_current_user_id();
+    $post_ids = jialiufl_get_user_likes($user_id);
+    $posts = new WP_Query([
+        'post__in' => ( empty($post_ids) ? [0] : $post_ids ),
+        'post_type' => 'any',
+        'posts_per_page' => -1,
+        'orderby' => 'post__in',
+        'update_post_meta_cache' => false, 
+        'update_post_term_cache' => false,
+        'ignore_sticky_posts' => true 
     ]);
 
-    $table->render_table();
+    $table = new Jialiufl_Posts_List_Table([
+        'posts' => $posts->posts,
+        'columns' => [
+            'title'  => __('Title'),
+            'author' => __('Author'),
+        ],
+        'sortable_columns' => [
+            'title' => ['post_title', true],
+        ]
+        
+    ]);
+
+    echo '<div class="wrap"><h1>Liked Posts</h1>';
+    echo '<form method="post">';
+        $table->prepared_items();
+        $table->display();
+    echo '</form></div>';
 }
+
 
 /**
  * Favorite Posts Page
  */
 function jialiufl_favorite_posts_page() {
     $user_id = get_current_user_id();
-    $fav_post_ids = jialiufl_get_user_favorites($user_id);
+    $post_ids = jialiufl_get_user_favorites($user_id);
 
-    $table = new Jialiufl_Posts_List_Table([
-        'post_ids' => $fav_post_ids,
-        'title'    => 'Favorited Posts',
+    $posts = new WP_Query([
+        'post__in' => ( empty($post_ids) ? [0] : $post_ids ),
+        'post_type' => 'any',
+        'posts_per_page' => -1,
+        'orderby' => 'post__in',
+        'update_post_meta_cache' => false, 
+        'update_post_term_cache' => false,
+        'ignore_sticky_posts' => true 
     ]);
 
-    $table->render_table();
+    $table = new Jialiufl_Posts_List_Table([
+        'posts' => $posts->posts,
+        'columns' => [
+            'title'  => __('Title'),
+            'author' => __('Author'),
+        ],
+        'sortable_columns' => [
+            'title' => ['post_title', true],
+        ]
+        
+    ]);
+
+    echo '<div class="wrap"><h1>Liked Posts</h1>';
+    echo '<form method="post">';
+        $table->prepared_items();
+        $table->display();
+    echo '</form></div>';
 }
 
+/**
+ * Favorite Posts Report Page
+ */
+function jialiufl_favorite_posts_report_page() {
+    $user_id = get_current_user_id();
+    $post_ids = jialiufl_get_user_likes($user_id);
+    $posts = new WP_Query([
+        'post__in' => ( empty($post_ids) ? [0] : $post_ids ),
+        'post_type' => 'any',
+        'posts_per_page' => -1,
+        'orderby' => 'post__in',
+        'update_post_meta_cache' => false, 
+        'update_post_term_cache' => false,
+        'ignore_sticky_posts' => true 
+    ]);
+
+    $table = new Jialiufl_Posts_List_Table([
+        'posts' => $posts->posts,
+        'columns' => [
+            'title'  => __('Title'),
+            'author' => __('Author'),
+            'count' => __('Count'),
+        ],
+        'sortable_columns' => [
+            'title' => ['post_title', true],
+            'count' => ['post_count', true],
+        ],
+        'action_type' => 'favorite'
+    ]);
+
+    echo '<div class="wrap"><h1>Liked Posts</h1>';
+    echo '<form method="post">';
+        $table->prepared_items();
+        $table->display();
+    echo '</form></div>';
+}
 ?>
