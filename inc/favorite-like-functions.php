@@ -11,19 +11,31 @@ function jialiufl_get_likes_db() {
     return $table_name;
 }
 
-// Get user likes count
-function jialiufl_get_user_likes_count($user_id) {
+// Get likes
+function jialiufl_get_likes() {
     global $wpdb;
     $table_name = jialiufl_get_likes_db();
-    $count = $wpdb->get_var($wpdb->prepare("SELECT COUNT(*) FROM $table_name WHERE user_id = %d", $user_id));
+    $results = $wpdb->get_col(
+        $wpdb->prepare("SELECT post_id FROM $table_name")
+    );
+    return $results;
+}
+
+// Get user likes count
+function jialiufl_get_user_likes_count($user_id) {
+    $count = get_user_meta( $user_id, 'jialiufl_likes_count', true );
+    if ( empty( $count ) ) {
+        $count = 0;
+    }
     return $count;
 }
 
 // Get user likes count
 function jialiufl_get_post_likes_count($post_id) {
-    global $wpdb;
-    $table_name = jialiufl_get_likes_db();
-    $count = $wpdb->get_var($wpdb->prepare("SELECT COUNT(*) FROM $table_name WHERE post_id = %d", $post_id));
+    $count = get_post_meta( $post_id, 'jialiufl_likes_count', true );
+    if ( empty( $count ) ) {
+        $count = 0;
+    }
     return $count;
 }
 
@@ -37,14 +49,6 @@ function jialiufl_get_user_likes($user_id) {
     return $results;
 }
 
-// Get post likes
-function jialiufl_get_post_likes($post_id) {
-    global $wpdb;
-    $table_name = jialiufl_get_likes_db();
-    $likes = $wpdb->get_results($wpdb->prepare("SELECT post_id FROM $table_name WHERE post_id = %d", $post_id));
-    return $likes;
-}
-
 // Exist user post like
 function jialiufl_user_post_like_exist($user_id, $post_id) {
     global $wpdb;
@@ -52,7 +56,6 @@ function jialiufl_user_post_like_exist($user_id, $post_id) {
     $exists = $wpdb->get_var($wpdb->prepare("SELECT COUNT(*) FROM $table_name WHERE user_id = %d AND post_id = %d", $user_id, $post_id));
     return $exists > 0;
 }
-
 
 // Add like
 function jialiufl_add_like($user_id, $post_id) {
@@ -83,8 +86,24 @@ function jialiufl_toggle_like($user_id, $post_id) {
 
     if ($exists) {
         $result = jialiufl_remove_like($user_id, $post_id);
+        if( !is_wp_error( $result ) ) {
+            $likes_count = jialiufl_get_post_likes_count($post_id);
+            $likes_count--;
+            update_post_meta($post_id, 'jialiufl_likes_count', $likes_count);
+            $user_likes_count = jialiufl_get_user_likes_count($user_id);
+            $user_likes_count--;
+            update_user_meta($user_id, 'jialiufl_likes_count', $user_likes_count);
+        }
     } else {
         $result = jialiufl_add_like($user_id, $post_id);
+        if( !is_wp_error( $result ) ) {
+            $likes_count = jialiufl_get_post_likes_count($post_id);
+            $likes_count++;
+            update_post_meta($post_id, 'jialiufl_likes_count', $likes_count);
+            $user_likes_count = jialiufl_get_user_likes_count($user_id);
+            $user_likes_count++;
+            update_user_meta($user_id, 'jialiufl_likes_count', $user_likes_count);
+        }
     }
     return $result;
 }
@@ -101,23 +120,27 @@ function jialiufl_get_favorites_db() {
 function jialiufl_get_favorites() {
     global $wpdb;
     $table_name = jialiufl_get_favorites_db();
-    $results = $wpdb->get_results($wpdb->prepare("SELECT post_id FROM $table_name"));
+    $results = $wpdb->get_col(
+        $wpdb->prepare("SELECT post_id FROM $table_name")
+    );
     return $results;
 }
 
 // Get user favorites count
 function jialiufl_get_user_favorites_count($user_id) {
-    global $wpdb;
-    $table_name = jialiufl_get_favorites_db();
-    $count = $wpdb->get_var($wpdb->prepare("SELECT COUNT(*) FROM $table_name WHERE user_id = %d", $user_id));
+    $count = get_user_meta( $user_id, 'jialiufl_favorites_count', true );
+    if ( empty( $count ) ) {
+        $count = 0;
+    }
     return $count;
 }
 
 // Get post favorites count
 function jialiufl_get_post_favorites_count($post_id) {
-    global $wpdb;
-    $table_name = jialiufl_get_favorites_db();
-    $count = $wpdb->get_var($wpdb->prepare("SELECT COUNT(*) FROM $table_name WHERE post_id = %d", $post_id));
+    $count = get_post_meta( $user_id, 'jialiufl_favorites_count', true );
+    if ( empty( $count ) ) {
+        $count = 0;
+    }
     return $count;
 }
 
@@ -129,14 +152,6 @@ function jialiufl_get_user_favorites($user_id) {
         $wpdb->prepare("SELECT post_id FROM $table_name WHERE user_id = %d", $user_id)
     );
     return $results;
-}
-
-// Get post favorites
-function jialiufl_get_post_favorites($post_id) {
-    global $wpdb;
-    $table_name = jialiufl_get_favorites_db();
-    $favorites = $wpdb->get_results($wpdb->prepare("SELECT post_id FROM $table_name WHERE post_id = %d", $post_id));
-    return $favorites;
 }
 
 // Exist user post favorite     
@@ -176,8 +191,24 @@ function jialiufl_toggle_favorite($user_id, $post_id) {
 
     if ($exists) {
         $result = jialiufl_remove_favorite($user_id, $post_id);
+        if( !is_wp_error( $result ) ) {
+            $favorites_count = jialiufl_get_post_favorites_count($post_id);
+            $favorites_count--;
+            update_post_meta($post_id, 'jialiufl_favorites_count', $favorites_count);
+            $user_favorites_count = jialiufl_get_user_favorites_count($user_id);
+            $user_favorites_count--;
+            update_user_meta($user_id, 'jialiufl_favorites_count', $user_favorites_count);
+        }
     } else {
         $result = jialiufl_add_favorite($user_id, $post_id);
+        if( !is_wp_error( $result ) ) {
+            $favorites_count = jialiufl_get_post_favorites_count($post_id);
+            $favorites_count++;
+            update_post_meta($post_id, 'jialiufl_favorites_count', $favorites_count);
+            $user_favorites_count = jialiufl_get_user_favorites_count($user_id);
+            $user_favorites_count++;
+            update_user_meta($user_id, 'jialiufl_favorites_count', $user_favorites_count);
+        }
     }
     return $result;
 }
@@ -192,9 +223,11 @@ function jialiufl_favorites_table() {
         id mediumint(9) NOT NULL AUTO_INCREMENT,
         user_id mediumint(9) NOT NULL,
         post_id mediumint(9) NOT NULL,
+        date_added DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
         PRIMARY KEY  (id),
         KEY user_id (user_id),
-        KEY post_id (post_id)
+        KEY post_id (post_id),
+        KEY date_added (date_added)
     ) $charset_collate;";
     require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
     dbDelta($sql);
@@ -209,9 +242,11 @@ function jialiufl_likes_table() {
         id mediumint(9) NOT NULL AUTO_INCREMENT,
         user_id mediumint(9) NOT NULL,
         post_id mediumint(9) NOT NULL,
+        date_added DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
         PRIMARY KEY  (id),
         KEY user_id (user_id),
-        KEY post_id (post_id)
+        KEY post_id (post_id),
+        KEY date_added (date_added)
     ) $charset_collate;";
     require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
     dbDelta($sql);

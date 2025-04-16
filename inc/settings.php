@@ -219,36 +219,108 @@ function jialiufl_button_position_field() {
  * Liked Posts Page
  */
 function jialiufl_liked_posts_page() {
-    $user_id = get_current_user_id(); 
-    $liked_post_ids = jialiufl_get_user_likes($user_id); // Must return array of post IDs
-
-    $table = new Jialiufl_Posts_List_Table([
-        'post_ids' => $liked_post_ids,
-        'title'    => esc_html__('Liked Posts', 'jiali-user-favorites-and-likes'),
+    $user_id = get_current_user_id();
+    $post_ids = jialiufl_get_user_likes($user_id);
+    $posts = new WP_Query([
+        'post__in' => ( empty($post_ids) ? [0] : $post_ids ),
+        'post_type' => 'any',
+        'posts_per_page' => -1,
+        'orderby' => 'post__in',
+        'update_post_meta_cache' => false, 
+        'update_post_term_cache' => false,
+        'ignore_sticky_posts' => true 
     ]);
 
-    $table->render_table();
+    $table = new Jialiufl_Posts_List_Table([
+        'posts' => $posts->posts,
+        'columns' => [
+            'title'  => __('Title'),
+            'author' => __('Author'),
+        ],
+        'sortable_columns' => [
+            'title' => ['post_title', true],
+        ]
+        
+    ]);
+
+    echo '<div class="wrap"><h1>Liked Posts</h1>';
+    echo '<form method="post">';
+        $table->prepared_items();
+        $table->display();
+    echo '</form></div>';
 }
+
 
 /**
  * Favorite Posts Page
  */
 function jialiufl_favorite_posts_page() {
     $user_id = get_current_user_id();
-    $fav_post_ids = jialiufl_get_user_favorites($user_id);
+    $post_ids = jialiufl_get_user_favorites($user_id);
 
-    $table = new Jialiufl_Posts_List_Table([
-        'post_ids' => $fav_post_ids,
-        'title'    => esc_html__('Favorited Posts', 'jiali-user-favorites-and-likes'),
+    $posts = new WP_Query([
+        'post__in' => ( empty($post_ids) ? [0] : $post_ids ),
+        'post_type' => 'any',
+        'posts_per_page' => -1,
+        'orderby' => 'post__in',
+        'update_post_meta_cache' => false, 
+        'update_post_term_cache' => false,
+        'ignore_sticky_posts' => true 
     ]);
 
-    $table->render_table();
+    $table = new Jialiufl_Posts_List_Table([
+        'posts' => $posts->posts,
+        'columns' => [
+            'title'  => __('Title'),
+            'author' => __('Author'),
+        ],
+        'sortable_columns' => [
+            'title' => ['post_title', true],
+        ]
+        
+    ]);
+
+    echo '<div class="wrap"><h1>Liked Posts</h1>';
+    echo '<form method="post">';
+        $table->prepared_items();
+        $table->display();
+    echo '</form></div>';
 }
 
 /**
  * Favorite Posts Report Page
  */
 function jialiufl_favorite_posts_report_page() {
-    echo 'Something';
+    $user_id = get_current_user_id();
+    $post_ids = jialiufl_get_user_likes($user_id);
+    $posts = new WP_Query([
+        'post__in' => ( empty($post_ids) ? [0] : $post_ids ),
+        'post_type' => 'any',
+        'posts_per_page' => -1,
+        'orderby' => 'post__in',
+        'update_post_meta_cache' => false, 
+        'update_post_term_cache' => false,
+        'ignore_sticky_posts' => true 
+    ]);
+
+    $table = new Jialiufl_Posts_List_Table([
+        'posts' => $posts->posts,
+        'columns' => [
+            'title'  => __('Title'),
+            'author' => __('Author'),
+            'count' => __('Count'),
+        ],
+        'sortable_columns' => [
+            'title' => ['post_title', true],
+            'count' => ['post_count', true],
+        ],
+        'action_type' => 'favorite'
+    ]);
+
+    echo '<div class="wrap"><h1>Liked Posts</h1>';
+    echo '<form method="post">';
+        $table->prepared_items();
+        $table->display();
+    echo '</form></div>';
 }
 ?>
