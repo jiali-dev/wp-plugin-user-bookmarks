@@ -17,11 +17,11 @@ function jialiufl_enqueue_assets() {
 }
 
 /**
- * Generate the like and favorite buttons based on settings
+ * Generate the like and bookmark buttons based on settings
  *
  * @param string $post_type
  * @param array $enabled_for_like
- * @param array $enabled_for_fav
+ * @param array $enabled_for_bookmark
  * @return string
  */
 function jialiufl_get_buttons_html() {
@@ -32,28 +32,28 @@ function jialiufl_get_buttons_html() {
     $post_type = get_post_type($post);
 
     $enabled_for_like = get_option('jialiufl_enabled_post_types_for_like', []);
-    $enabled_for_fav  = get_option('jialiufl_enabled_post_types_for_favorite', []);
+    $enabled_for_bookmark  = get_option('jialiufl_enabled_post_types_for_bookmark', []);
 
     // Exit early if not enabled for this post type
-    if (!in_array($post_type, $enabled_for_like) && !in_array($post_type, $enabled_for_fav)) {
+    if (!in_array($post_type, $enabled_for_like) && !in_array($post_type, $enabled_for_bookmark)) {
         return '';
     }
 
     ob_start();
     ?>
-    <div class="jialiufl-favorite-and-like" data-post-id="<?php echo esc_attr($post->ID); ?>">
+    <div class="jialiufl-bookmark-and-like" data-post-id="<?php echo esc_attr($post->ID); ?>">
         <?php if (in_array($post->post_type, $enabled_for_like)) : 
             $like_exist = jialiufl_user_post_like_exist(get_current_user_id(  ), $post->ID ) ?>
-            <span class="jialiufl-favorite-and-like-button <?php echo ( $like_exist ? 'jialiufl-favorite-and-like-button-active' : '' ) ?>" data-action="like">
+            <span class="jialiufl-bookmark-and-like-button <?php echo ( $like_exist ? 'jialiufl-bookmark-and-like-button-active' : '' ) ?>" data-action="like">
                 <i class="jialiufl-icon <?php echo $like_exist ? 'fa-solid' : 'fa-regular' ?> fa-heart"></i>
                 <span class="jialiufl-like-count"><?php $likes_count = jialiufl_get_post_likes_count($post->ID); echo ( $likes_count > 0 ? $likes_count : '' ); ?></span>
             </span>
         <?php endif; ?>
-        <?php if (in_array($post->post_type, $enabled_for_fav)) : 
-            $favorites_exist = jialiufl_user_post_favorite_exist(get_current_user_id(  ), $post->ID ) ?>
-            <span class="jialiufl-favorite-and-like-button <?php echo ( $favorites_exist ? 'jialiufl-favorite-and-like-button-active' : '' ) ?>" data-action="favorite">
-                <i class="jialiufl-icon <?php echo ( $favorites_exist ? 'fa-solid' : 'fa-regular' ) ?> fa-bookmark"></i>
-                <span class="jialiufl-favorite-count"><?php $favorites_count = jialiufl_get_post_favorites_count($post->ID); echo ( $favorites_count > 0 ? $favorites_count : '' ); ?></span>
+        <?php if (in_array($post->post_type, $enabled_for_bookmark)) : 
+            $bookmarks_exist = jialiufl_user_post_bookmark_exist(get_current_user_id(  ), $post->ID ) ?>
+            <span class="jialiufl-bookmark-and-like-button <?php echo ( $bookmarks_exist ? 'jialiufl-bookmark-and-like-button-active' : '' ) ?>" data-action="bookmark">
+                <i class="jialiufl-icon <?php echo ( $bookmarks_exist ? 'fa-solid' : 'fa-regular' ) ?> fa-bookmark"></i>
+                <span class="jialiufl-bookmark-count"><?php $bookmarks_count = jialiufl_get_post_bookmarks_count($post->ID); echo ( $bookmarks_count > 0 ? $bookmarks_count : '' ); ?></span>
             </span>
         <?php endif; ?>
     </div>

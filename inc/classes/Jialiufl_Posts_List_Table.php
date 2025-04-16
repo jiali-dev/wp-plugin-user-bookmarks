@@ -73,11 +73,12 @@ class Jialiufl_Posts_List_Table extends WP_List_Table {
         if (is_object($item) && property_exists($item, 'post_author')) {
             return esc_html(get_the_author_meta('display_name', $item->post_author));
         }
-        return esc_html__('Unknown Author', 'jiali-user-favorites-and-likes');
+        return esc_html__('Unknown Author', 'jiali-user-bookmarks-and-likes');
     }
 
     public function column_count($item) {
-        return esc_html( $this->action_type === 'like' ? jialiufl_get_post_likes_count($item->ID) : jialiufl_get_post_favorites_count($item->ID) );
+
+        return esc_html( ( $this->action_type === 'like' ? jialiufl_get_post_likes_count($item->ID) : jialiufl_get_post_bookmarks_count($item->ID) ) );
     }
 
     public function prepared_items() {
@@ -89,14 +90,20 @@ class Jialiufl_Posts_List_Table extends WP_List_Table {
         $orderby = $_GET['orderby'] ?? 'title';
         $order   = $_GET['order'] ?? 'asc';
 
-        if (!empty($data) && ((is_object($data[0]) && property_exists($data[0], $orderby)) || (is_array($data[0]) && array_key_exists($orderby, $data[0])))) {
+        if (!empty($data)) {
             usort($data, function ($a, $b) use ($orderby, $order) {
+                if ($orderby === 'count') {
+                    $countA = ( $this->action_type === 'like' ? jialiufl_get_post_likes_count($a->ID) : jialiufl_get_post_bookmarks_count($a->ID) );
+                    $countB = ( $this->action_type === 'like' ? jialiufl_get_post_likes_count($b->ID) : jialiufl_get_post_bookmarks_count($b->ID) );
+                    return ($order === 'asc') ? $countA - $countB : $countB - $countA;
+                }
+        
                 $valA = is_object($a) ? $a->$orderby ?? '' : $a[$orderby] ?? '';
                 $valB = is_object($b) ? $b->$orderby ?? '' : $b[$orderby] ?? '';
-
+        
                 return ($order === 'asc') ? strnatcasecmp($valA, $valB) : strnatcasecmp($valB, $valA);
             });
-        }
+        }        
 
         $per_page = $this->per_page;
         $current_page = max(1, intval($this->get_pagenum()));
