@@ -1,15 +1,15 @@
 <?php
 
 /**
- * Plugin Name: Jiali User Favorites and Likes
+ * Plugin Name: Jiali User Bookmarks and Likes
  * Plugin URI: https://mahyarerad.com
- * Description: Allow users to like and favorite posts. Simple, fast, and easy to use.
+ * Description: Allow users to like and bookmark posts. Simple, fast, and easy to use.
  * Version: 1.0.0
  * Author: Mahyar Rad
  * Author URI: https://mahyarerad.com/
  * License: GPL-2.0+
  * License URI: https://www.gnu.org/licenses/gpl-2.0.html
- * Text Domain: jiali-user-favorites-and-likes
+ * Text Domain: jiali-user-bookmarks-and-likes
  * Domain Path: /languages
 */
 

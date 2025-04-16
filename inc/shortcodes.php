@@ -4,7 +4,7 @@
 if (!defined('ABSPATH')) exit;
 
 /**
- * Shortcode handler for displaying like and favorite buttons
+ * Shortcode handler for displaying like and bookmark buttons
  *
  * Usage: [jialiufl_buttons]
  */

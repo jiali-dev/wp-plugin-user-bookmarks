@@ -7,7 +7,7 @@ if (!defined('ABSPATH')) exit;
 require_once( plugin_dir_path(__FILE__) . 'define_constants.php' );
 
 // Add DB functions
-require_once( JIALIUFL_INC_PATH . '/favorite-like-functions.php');
+require_once( JIALIUFL_INC_PATH . '/bookmark-like-functions.php');
 
 // Register theme assets
 require_once( JIALIUFL_INC_PATH . '/register_assets.php');

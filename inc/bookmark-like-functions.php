@@ -108,64 +108,64 @@ function jialiufl_toggle_like($user_id, $post_id) {
     return $result;
 }
 
-// Favorite functions
-// Get user favorites table
-function jialiufl_get_favorites_db() {
+// Bookmark functions
+// Get user bookmarks table
+function jialiufl_get_bookmarks_db() {
     global $wpdb;
-    $table_name = esc_sql($wpdb->prefix . 'jialiufl_favorites');
+    $table_name = esc_sql($wpdb->prefix . 'jialiufl_bookmarks');
     return $table_name;
 }
 
-// Get favorites
-function jialiufl_get_favorites() {
+// Get bookmarks
+function jialiufl_get_bookmarks() {
     global $wpdb;
-    $table_name = jialiufl_get_favorites_db();
+    $table_name = jialiufl_get_bookmarks_db();
     $results = $wpdb->get_col(
         $wpdb->prepare("SELECT post_id FROM $table_name")
     );
     return $results;
 }
 
-// Get user favorites count
-function jialiufl_get_user_favorites_count($user_id) {
-    $count = get_user_meta( $user_id, 'jialiufl_favorites_count', true );
+// Get user bookmarks count
+function jialiufl_get_user_bookmarks_count($user_id) {
+    $count = get_user_meta( $user_id, 'jialiufl_bookmarks_count', true );
     if ( empty( $count ) ) {
         $count = 0;
     }
     return $count;
 }
 
-// Get post favorites count
-function jialiufl_get_post_favorites_count($post_id) {
-    $count = get_post_meta( $user_id, 'jialiufl_favorites_count', true );
+// Get post bookmarks count
+function jialiufl_get_post_bookmarks_count($post_id) {
+    $count = get_post_meta( $post_id, 'jialiufl_bookmarks_count', true );
     if ( empty( $count ) ) {
         $count = 0;
     }
     return $count;
 }
 
-// Get user favorites
-function jialiufl_get_user_favorites($user_id) {
+// Get user bookmarks
+function jialiufl_get_user_bookmarks($user_id) {
     global $wpdb;
-    $table_name = jialiufl_get_favorites_db();
+    $table_name = jialiufl_get_bookmarks_db();
     $results = $wpdb->get_col(
         $wpdb->prepare("SELECT post_id FROM $table_name WHERE user_id = %d", $user_id)
     );
     return $results;
 }
 
-// Exist user post favorite     
-function jialiufl_user_post_favorite_exist($user_id, $post_id) {
+// Exist user post bookmark     
+function jialiufl_user_post_bookmark_exist($user_id, $post_id) {
     global $wpdb;
-    $table_name = jialiufl_get_favorites_db();
+    $table_name = jialiufl_get_bookmarks_db();
     $exists = $wpdb->get_var($wpdb->prepare("SELECT COUNT(*) FROM $table_name WHERE user_id = %d AND post_id = %d", $user_id, $post_id));
     return $exists > 0;
 }
 
-// Add favorite
-function jialiufl_add_favorite($user_id, $post_id) {
+// Add bookmark
+function jialiufl_add_bookmark($user_id, $post_id) {
     global $wpdb;
-    $table_name = jialiufl_get_favorites_db();
+    $table_name = jialiufl_get_bookmarks_db();
     $insert = $wpdb->insert($table_name, array(
         'user_id' => absint($user_id),
         'post_id' => absint($post_id)
@@ -173,10 +173,10 @@ function jialiufl_add_favorite($user_id, $post_id) {
     return $insert;
 }
 
-// Remove favorite
-function jialiufl_remove_favorite($user_id, $post_id) {
+// Remove bookmark
+function jialiufl_remove_bookmark($user_id, $post_id) {
     global $wpdb;
-    $table_name = jialiufl_get_favorites_db();
+    $table_name = jialiufl_get_bookmarks_db();
     $delete = $wpdb->delete($table_name, array(
         'user_id' => absint($user_id),
         'post_id' => absint($post_id)
@@ -184,40 +184,40 @@ function jialiufl_remove_favorite($user_id, $post_id) {
     return $delete;
 }
 
-// Toggle favorite
-function jialiufl_toggle_favorite($user_id, $post_id) {
+// Toggle bookmark
+function jialiufl_toggle_bookmark($user_id, $post_id) {
 
-    $exists = jialiufl_user_post_favorite_exist($user_id, $post_id);
+    $exists = jialiufl_user_post_bookmark_exist($user_id, $post_id);
 
     if ($exists) {
-        $result = jialiufl_remove_favorite($user_id, $post_id);
+        $result = jialiufl_remove_bookmark($user_id, $post_id);
         if( !is_wp_error( $result ) ) {
-            $favorites_count = jialiufl_get_post_favorites_count($post_id);
-            $favorites_count--;
-            update_post_meta($post_id, 'jialiufl_favorites_count', $favorites_count);
-            $user_favorites_count = jialiufl_get_user_favorites_count($user_id);
-            $user_favorites_count--;
-            update_user_meta($user_id, 'jialiufl_favorites_count', $user_favorites_count);
+            $bookmarks_count = jialiufl_get_post_bookmarks_count($post_id);
+            $bookmarks_count--;
+            update_post_meta($post_id, 'jialiufl_bookmarks_count', $bookmarks_count);
+            $user_bookmarks_count = jialiufl_get_user_bookmarks_count($user_id);
+            $user_bookmarks_count--;
+            update_user_meta($user_id, 'jialiufl_bookmarks_count', $user_bookmarks_count);
         }
     } else {
-        $result = jialiufl_add_favorite($user_id, $post_id);
+        $result = jialiufl_add_bookmark($user_id, $post_id);
         if( !is_wp_error( $result ) ) {
-            $favorites_count = jialiufl_get_post_favorites_count($post_id);
-            $favorites_count++;
-            update_post_meta($post_id, 'jialiufl_favorites_count', $favorites_count);
-            $user_favorites_count = jialiufl_get_user_favorites_count($user_id);
-            $user_favorites_count++;
-            update_user_meta($user_id, 'jialiufl_favorites_count', $user_favorites_count);
+            $bookmarks_count = jialiufl_get_post_bookmarks_count($post_id);
+            $bookmarks_count++;
+            update_post_meta($post_id, 'jialiufl_bookmarks_count', $bookmarks_count);
+            $user_bookmarks_count = jialiufl_get_user_bookmarks_count($user_id);
+            $user_bookmarks_count++;
+            update_user_meta($user_id, 'jialiufl_bookmarks_count', $user_bookmarks_count);
         }
     }
     return $result;
 }
 
-// Create favorites and likes tables
-// Create user favorites table
-function jialiufl_favorites_table() {
+// Create bookmarks and likes tables
+// Create user bookmarks table
+function jialiufl_bookmarks_table() {
     global $wpdb;
-    $table_name = jialiufl_get_favorites_db();
+    $table_name = jialiufl_get_bookmarks_db();
     $charset_collate = $wpdb->get_charset_collate();
     $sql = "CREATE TABLE IF NOT EXISTS $table_name (
         id mediumint(9) NOT NULL AUTO_INCREMENT,
@@ -254,7 +254,7 @@ function jialiufl_likes_table() {
 
 // Create tables on plugin activation
 function jialiufl_create_tables() {
-    jialiufl_favorites_table();
+    jialiufl_bookmarks_table();
     jialiufl_likes_table();
 }
 register_activation_hook(plugin_basename(dirname(__DIR__) . '/core.php'), 'jialiufl_create_tables');
