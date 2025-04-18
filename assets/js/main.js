@@ -1,15 +1,12 @@
 jQuery(function ($) {
   "use strict";
 
-  $(".jialiufl-bookmark-and-like-button").on("click", function () {
+  $(".jialiub-bookmark-button").on("click", function () {
     // Get current element
     let el = $(this);
 
-    // User action
-    let user_action = el.data("action");
-
     // Get wrapper
-    let wrapper = $(this).closest(".jialiufl-bookmark-and-like");
+    let wrapper = $(this).closest(".jialiub-bookmark");
 
     // Get post ID
     let post_id = wrapper.data("post-id");
@@ -18,12 +15,11 @@ jQuery(function ($) {
 
     $.ajax({
       type: "POST",
-      url: jialiufl_ajax.ajaxurl,
+      url: jialiub_ajax.ajaxurl,
       data: {
-        nonce: jialiufl_ajax.nonce,
-        user_action: user_action,
+        nonce: jialiub_ajax.nonce,
         post_id: post_id,
-        action: "jialiufl_bookmark_and_like_toggle_ajax",
+        action: "jialiub_bookmark_toggle_ajax",
       },
       beforeSend: function () {
         // Something before send;
@@ -32,19 +28,19 @@ jQuery(function ($) {
         Notiflix.Notify.failure(xhr.responseJSON.message);
       },
       success: function (response) {
-        if (response.user_action_exist === true) {
-          el.removeClass("jialiufl-bookmark-and-like-button-active");
-          el.find(".jialiufl-icon")
+        if (response.bookmark_exist === true) {
+          el.removeClass("jialiub-bookmark-button-active");
+          el.find(".jialiub-icon")
             .removeClass("fa-solid")
             .addClass("fa-regular");
         } else {
-          el.addClass("jialiufl-bookmark-and-like-button-active");
-          el.find(".jialiufl-icon")
+          el.addClass("jialiub-bookmark-button-active");
+          el.find(".jialiub-icon")
             .removeClass("fa-regular")
             .addClass("fa-solid");
         }
-        el.find(`.jialiufl-${user_action}-count`).html(
-          response.user_action_count > 0 ? response.user_action_count : ""
+        el.find(`.jialiub-bookmarks-count`).html(
+          response.bookmarks_count > 0 ? response.bookmarks_count : ""
         );
       },
       complete: function () {

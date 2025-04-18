@@ -1,4 +1,4 @@
-.jialiufl-bookmark-and-like {
+.jialiub-bookmark {
   display: flex;
   flex-wrap: wrap;
   gap: 12px;
@@ -10,15 +10,15 @@
   color: inherit;
 }
 
-.jialiufl-bookmark-and-like span {
+.jialiub-bookmark span {
   cursor: pointer;
   transition: color 0.3s ease;
 }
 
-.jialiufl-bookmark-and-like span:hover {
+.jialiub-bookmark span:hover {
   color: #e63946; /* Highlight color on hover */
 }
 
-.jialiufl-bookmark-and-like-button-active {
+.jialiub-bookmark-button-active {
   color: #e63946;
 }

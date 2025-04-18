@@ -4,14 +4,14 @@
 if (!defined('ABSPATH')) exit;
 
 /**
- * Shortcode handler for displaying like and bookmark buttons
+ * Shortcode handler for displaying bookmark button
  *
- * Usage: [jialiufl_buttons]
+ * Usage: [jialiub_bookmark_button]
  */
-function jialiufl_buttons_shortcode($atts) {
+function jialiub_bookmark_button_shortcode($atts) {
     
-    jialiufl_enqueue_assets();
+    jialiub_enqueue_assets();
 
-    return jialiufl_get_buttons_html();
+    return jialiub_get_bookmark_button_html();
 }
-add_shortcode('jialiufl_buttons', 'jialiufl_buttons_shortcode');
+add_shortcode('jialiub_bookmark_button', 'jialiub_bookmark_button_shortcode');
