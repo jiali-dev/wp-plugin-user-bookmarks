@@ -28,7 +28,7 @@ jQuery(function ($) {
         Notiflix.Notify.failure(xhr.responseJSON.message);
       },
       success: function (response) {
-        if (response.bookmark_exist === true) {
+        if (response.bookmark_exist !== true) {
           el.removeClass("jialiub-bookmark-button-active");
           el.find(".jialiub-icon")
             .removeClass("fa-solid")
@@ -39,7 +39,7 @@ jQuery(function ($) {
             .removeClass("fa-regular")
             .addClass("fa-solid");
         }
-        el.find(`.jialiub-bookmarks-count`).html(
+        el.find('.jialiub-bookmark-count').html(
           response.bookmarks_count > 0 ? response.bookmarks_count : ""
         );
       },

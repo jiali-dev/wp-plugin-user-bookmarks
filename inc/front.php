@@ -33,14 +33,14 @@ function jialiub_get_bookmark_button_html() {
     $enabled_for_bookmark  = get_option('jialiub_bookmark_enabled_post_types', []);
 
     // Exit early if not enabled for this post type
-    if ( !in_array($post_type, $enabled_for_bookmark)) {
+    if ( is_array($enabled_for_bookmark) && !in_array($post_type, $enabled_for_bookmark)) {
         return '';
     }
 
     ob_start();
     ?>
     <div class="jialiub-bookmark" data-post-id="<?php echo esc_attr($post->ID); ?>">
-        <?php if (in_array($post->post_type, $enabled_for_bookmark)) : 
+        <?php if( is_array($enabled_for_bookmark) && in_array($post->post_type, $enabled_for_bookmark)) : 
             $bookmarks_exist = jialiub_bookmark_exist(get_current_user_id(  ), $post->ID ) ?>
             <span class="jialiub-bookmark-button <?php echo ( $bookmarks_exist ? 'jialiub-bookmark-button-active' : '' ) ?>" data-action="bookmark">
                 <i class="jialiub-icon <?php echo ( $bookmarks_exist ? 'fa-solid' : 'fa-regular' ) ?> fa-bookmark"></i>

@@ -20,5 +20,5 @@
 }
 
 .jialiub-bookmark-button-active {
-  color: #e63946;
+  color: #e63946!important; /* Active color */
 }

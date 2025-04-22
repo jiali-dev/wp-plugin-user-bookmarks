@@ -32,14 +32,14 @@ function jialiub_bookmark_toggle_ajax( ) {
         // Check if post type is enabled for bookmark
         $bookmark_enabled_post_types = get_option('jialiub_bookmark_enabled_post_types', []);
 
-        if ( !in_array($post_type, $bookmark_enabled_post_types) )
+        if (  is_array($bookmark_enabled_post_types) && !in_array($post_type, $bookmark_enabled_post_types) )
             throw new Exception( __( 'This post type is not enabled for this action!', 'jiali-user-bookmarks' ) , 403 );
         
         // Toggle user bookmark
         $result = jialiub_toggle_bookmark($user_id, $post_id);
         
         if( !is_wp_error( $result ) ) {
-            $data['bookmark_exist'] = jialiub_bookmark_exist( $user_id, $post_id ); // Check if user has already bookmarked or bookmarked the post
+            $data['bookmark_exist'] = jialiub_bookmark_exist( $user_id, $post_id );
             $data['bookmarks_count'] = jialiub_get_post_bookmarks_count($post_id);
         } else {
             throw new Exception( __( 'An unknown error is occured, Try again!', 'jiali-user-bookmarks' ) , 403 );

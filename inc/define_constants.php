@@ -13,4 +13,9 @@ define('JIALIUB_JS_URI', JIALIUB_ASSETS_URI . '/js');
 define('JIALIUB_PLUGIN_PATH', plugin_dir_path(dirname(__DIR__) . '/core.php'));
 define('JIALIUB_INC_PATH', JIALIUB_PLUGIN_PATH . 'inc');
 
+$singular = get_option('jialiub_singular_label');
+$plural = get_option('jialiub_plural_label');
+define('JIALIUB_SINGULAR_LABEL', !empty($singular) ? $singular : esc_html__( 'Bookmark', 'jiali-user-bookmarks' ) );
+define('JIALIUB_PLURAL_LABEL', !empty($plural) ? $plural : esc_html__( 'Bookmarks', 'jiali-user-bookmarks' ) );
+
 ?>
