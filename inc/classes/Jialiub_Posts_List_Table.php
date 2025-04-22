@@ -6,14 +6,13 @@ if (!class_exists('WP_List_Table')) {
     require_once ABSPATH . 'wp-admin/includes/class-wp-list-table.php';
 }
 
-class Jialiufl_Posts_List_Table extends WP_List_Table {
+class Jialiub_Posts_List_Table extends WP_List_Table {
     
     protected $items_data;
     protected $columns;
     protected $sortable;
     // protected $bulk_actions;
     protected $per_page;
-    protected $action_type;
 
     public function __construct($args = []) {
         parent::__construct([
@@ -38,7 +37,6 @@ class Jialiufl_Posts_List_Table extends WP_List_Table {
         //     'delete' => __('Delete')
         // ];
 
-        $this->action_type  = $args['action_type'] ?? 'like';
     }
 
     public function get_columns() {
@@ -73,12 +71,12 @@ class Jialiufl_Posts_List_Table extends WP_List_Table {
         if (is_object($item) && property_exists($item, 'post_author')) {
             return esc_html(get_the_author_meta('display_name', $item->post_author));
         }
-        return esc_html__('Unknown Author', 'jiali-user-bookmarks-and-likes');
+        return esc_html__('Unknown Author', 'jiali-user-bookmarks');
     }
 
     public function column_count($item) {
 
-        return esc_html( ( $this->action_type === 'like' ? jialiufl_get_post_likes_count($item->ID) : jialiufl_get_post_bookmarks_count($item->ID) ) );
+        return esc_html( jialiub_get_post_bookmarks_count($item->ID) );
     }
 
     public function prepared_items() {
@@ -93,8 +91,8 @@ class Jialiufl_Posts_List_Table extends WP_List_Table {
         if (!empty($data)) {
             usort($data, function ($a, $b) use ($orderby, $order) {
                 if ($orderby === 'count') {
-                    $countA = ( $this->action_type === 'like' ? jialiufl_get_post_likes_count($a->ID) : jialiufl_get_post_bookmarks_count($a->ID) );
-                    $countB = ( $this->action_type === 'like' ? jialiufl_get_post_likes_count($b->ID) : jialiufl_get_post_bookmarks_count($b->ID) );
+                    $countA = jialiub_get_post_bookmarks_count($a->ID);
+                    $countB = jialiub_get_post_bookmarks_count($b->ID);
                     return ($order === 'asc') ? $countA - $countB : $countB - $countA;
                 }
         

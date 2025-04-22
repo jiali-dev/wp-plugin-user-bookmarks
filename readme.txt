@@ -1,6 +1,6 @@
-=== Jiali User Bookmarks and Likes ===
+=== Jiali User Bookmarks ===
 Contributors: mrgrad  
-Tags: user bookmarks, post likes, like button, bookmark posts, UX  
+Tags: user bookmarks, bookmark posts, UX  
 Requires at least: 5.0  
 Tested up to: 6.7  
 Requires PHP: 7.2  
@@ -8,39 +8,39 @@ Stable tag: 1.0.0
 License: GPLv2 or later  
 License URI: https://www.gnu.org/licenses/gpl-2.0.html  
 
-Let your visitors like and bookmark posts with ease! Lightweight, AJAX-based plugin to enhance user engagement and interactivity. 💖🔥
+Let your visitors easily bookmark posts! Lightweight, AJAX-powered plugin to enhance user engagement and interactivity. 📑✨
 
 == Description ==  
-**Jiali User Bookmarks and Likes** is a simple, AJAX-powered WordPress plugin that allows users to "Like" or "Bookmark" posts. Boost engagement by giving users a way to express interest and save content for later—all without refreshing the page.
+**Jiali User Bookmarks** is a simple, AJAX-powered WordPress plugin that allows users to "Bookmark" posts. It provides an easy way for users to save content for later viewing—all without refreshing the page.
 
 ### **🚀 Features:**  
-– ❤️ Add Like and Bookmark buttons to posts  
+– 📑 Add Bookmark button to posts  
 – ⚡ AJAX-powered for seamless user interaction  
-– 🔐 Logged-in user support  
-– 📊 Count likes/bookmarks per post  
+– 🔐 Logged-in user support for personalized bookmarking  
+– 📊 Display bookmark count per post  
 – 🧩 Shortcode and PHP function support for flexible placement  
 – 🧼 Lightweight and developer-friendly
 
 == Installation ==  
-1. Upload the plugin files to the `/wp-content/plugins/jiali-user-bookmarks-and-likes/` directory or install via WordPress Plugin Installer.  
+1. Upload the plugin files to the `/wp-content/plugins/jiali-user-bookmarks/` directory or install via WordPress Plugin Installer.  
 2. Activate the plugin through the ‘Plugins’ menu in WordPress.  
 3. Configure styles or placement if needed (shortcodes, hooks, or template integration).
 
 == Frequently Asked Questions ==  
 
-= Do users need to be logged in to like/bookmark a post? =  
-Yes, only logged-in users can like or bookmark posts to ensure personalization and prevent spam.
+= Do users need to be logged in to bookmark a post? =  
+Yes, only logged-in users can bookmark posts to ensure personalization and prevent spam.
 
-= Can I show the like/bookmark count? =  
-Yes! Use the provided shortcode or PHP functions to display counts anywhere in your theme.
+= Can I show the bookmark count? =  
+Yes! You can display the bookmark count for each post anywhere in your theme using the provided shortcode or PHP functions.
 
 = Is the plugin AJAX-based? =  
-Yes. All actions (like/bookmark) happen asynchronously without page reloads.
+Yes. All actions (bookmarking) happen asynchronously without page reloads.
 
 == Changelog ==  
 
 = 1.0.0 =  
-– Initial release with like and bookmark functionality  
+– Initial release with bookmark functionality  
 
 == Upgrade Notice ==  
 
