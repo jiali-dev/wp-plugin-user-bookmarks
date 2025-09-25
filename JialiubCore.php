@@ -23,12 +23,7 @@ class JialiubCore {
     }
 
     private function defineConstants() {
-        define('JIALIUB_PLUGIN_PATH', plugin_dir_path(__FILE__));
-        define('JIALIUB_PLUGIN_URL', plugin_dir_url(__FILE__));
-        define('JIALIUB_CLASSES_PATH', JIALIUB_PLUGIN_PATH . 'classes/');
-        define('JIALIUB_ASSETS_URI', JIALIUB_PLUGIN_URL . 'assets');
-        define('JIALIUB_CSS_URI', JIALIUB_ASSETS_URI . 'css');
-        define('JIALIUB_JS_URI', JIALIUB_ASSETS_URI . 'js');
+        JialiubDefineConstants::defien();
     }
 
     private function registerAutoload() {
@@ -52,11 +47,13 @@ class JialiubCore {
         add_action('admin_enqueue_scripts', [$this, 'adminRegisterAssets']);
 
         include_once( ABSPATH.'wp-includes/pluggable.php'); // For getting wp_get_current_user and etc. 
-        // include_once(JIALIUB_PLUGIN_PATH.'inc/js-translation.php');
-        // include_once(JIALIUB_PLUGIN_PATH.'inc/ajax.php');
-        // include_once(JIALIUB_PLUGIN_PATH.'inc/shortcodes.php');
         // include_once(JIALIUB_PLUGIN_PATH.'inc/functions.php');
-        // include_once(JIALIUB_PLUGIN_PATH.'inc/widgets.php');
+        include_once(JIALIUB_PLUGIN_PATH.'inc/bookmark-functions.php');
+        include_once(JIALIUB_PLUGIN_PATH.'inc/front.php');
+        include_once(JIALIUB_PLUGIN_PATH.'inc/settings.php');
+        include_once(JIALIUB_PLUGIN_PATH.'inc/shortcodes.php');
+        include_once(JIALIUB_PLUGIN_PATH.'inc/ajax-functions.php');
+        include_once(JIALIUB_CLASSES_PATH.'JialiubPostsListTable.php');
         
     }
 
@@ -72,7 +69,6 @@ class JialiubCore {
 
     // Activate plugin
     public static function registerActivation() {
-        
 
     }
 
