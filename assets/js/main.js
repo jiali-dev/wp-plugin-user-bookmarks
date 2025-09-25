@@ -46,6 +46,9 @@ jQuery(function ($) {
         el.find('.jialiub-bookmark-count').html(
           response.bookmarks_count > 0 ? `(${response.bookmarks_count})` : ""
         );
+        el?.find('.jialiub-bookmark-label').html(
+         `${response.bookmarks_label}`
+        );
       },
       complete: function () {
         // Something after complete;

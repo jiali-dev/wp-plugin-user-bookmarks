@@ -41,6 +41,13 @@ function jialiub_bookmark_toggle_ajax( ) {
         if( !is_wp_error( $result ) ) {
             $data['bookmark_exist'] = JialiubBookmarkFunctions::getInstance()->bookmarkExists( $user_id, $post_id );
             $data['bookmarks_count'] = JialiubBookmarkFunctions::getInstance()->getPostBookmarksCount($post_id);
+
+            if( !empty(get_option('jialiub_show_label') ) ) {
+                $data['bookmarks_label'] = ( $data['bookmark_exist'] ? JIALIUB_ACTION_LABEL : JIALIUB_SINGULAR_LABEL );
+            } else {
+                $data['bookmarks_label'] = '';
+            }
+
         } else {
             throw new Exception( __( 'An unknown error is occured, Try again!', 'jiali-user-bookmarks' ) , 403 );
         }

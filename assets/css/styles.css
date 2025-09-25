@@ -18,7 +18,3 @@
 .jialiub-bookmark span:hover {
   color: #e63946; /* Highlight color on hover */
 }
-
-.jialiub-bookmark-button-active {
-  color: #e63946!important; /* Active color */
-}
