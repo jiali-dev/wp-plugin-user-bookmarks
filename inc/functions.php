@@ -25,6 +25,6 @@ require_once( JIALIUB_INC_PATH . '/shortcodes.php');
 require_once( JIALIUB_INC_PATH . '/ajax-functions.php');
 
 // Register custom table
-require_once( JIALIUB_INC_PATH . '/classes/Jialiub_Posts_List_Table.php');
+// require_once( JIALIUB_INC_PATH . '/classes/Jialiub_Posts_List_Table.php');
 
 ?>
