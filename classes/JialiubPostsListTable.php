@@ -76,7 +76,7 @@ class JialiubPostsListTable extends WP_List_Table {
 
     public function column_count($item) {
 
-        return esc_html( jialiub_get_post_bookmarks_count($item->ID) );
+        return esc_html( JialiubBookmarkFunctions::getInstance()->getPostBookmarksCount($item->ID) );
     }
 
     public function prepared_items() {
@@ -91,8 +91,8 @@ class JialiubPostsListTable extends WP_List_Table {
         if (!empty($data)) {
             usort($data, function ($a, $b) use ($orderby, $order) {
                 if ($orderby === 'count') {
-                    $countA = jialiub_get_post_bookmarks_count($a->ID);
-                    $countB = jialiub_get_post_bookmarks_count($b->ID);
+                    $countA = JialiubBookmarkFunctions::getInstance()->getPostBookmarksCount($a->ID);
+                    $countB = JialiubBookmarkFunctions::getInstance()->getPostBookmarksCount($b->ID);
                     return ($order === 'asc') ? $countA - $countB : $countB - $countA;
                 }
         

@@ -42,10 +42,10 @@ function jialiub_bookmark_button_html() {
     ?>
     <div class="jialiub-bookmark" data-post-id="<?php echo esc_attr($post->ID); ?>">
         <?php if( is_array($enabled_for_bookmark) && in_array($post->post_type, $enabled_for_bookmark)) : 
-            $bookmarks_exist = jialiub_bookmark_exist(get_current_user_id(  ), $post->ID ) ?>
+            $bookmarks_exist = JialiubBookmarkFunctions::getInstance()->bookmarkExists(get_current_user_id(  ), $post->ID ) ?>
             <span class="jialiub-bookmark-button <?php echo ( $bookmarks_exist ? 'jialiub-bookmark-button-active' : '' ) ?>" data-action="bookmark">
                 <i class="jialiub-icon <?php echo ( $bookmarks_exist ? 'fa-solid' : 'fa-regular' ) ?> fa-bookmark"></i>
-                <span class="jialiub-bookmark-count"><?php $bookmarks_count = jialiub_get_post_bookmarks_count($post->ID); echo ( $bookmarks_count > 0 ? $bookmarks_count : '' ); ?></span>
+                <span class="jialiub-bookmark-count"><?php $bookmarks_count = JialiubBookmarkFunctions::getInstance()->getPostBookmarksCount($post->ID); echo ( $bookmarks_count > 0 ? $bookmarks_count : '' ); ?></span>
             </span>
         <?php endif; ?>
     </div>

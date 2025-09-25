@@ -36,11 +36,11 @@ function jialiub_bookmark_toggle_ajax( ) {
             throw new Exception( __( 'This post type is not enabled for this action!', 'jiali-user-bookmarks' ) , 403 );
         
         // Toggle user bookmark
-        $result = jialiub_toggle_bookmark($user_id, $post_id);
+        $result = JialiubBookmarkFunctions::getInstance()->toggleBookmark($user_id, $post_id);
         
         if( !is_wp_error( $result ) ) {
-            $data['bookmark_exist'] = jialiub_bookmark_exist( $user_id, $post_id );
-            $data['bookmarks_count'] = jialiub_get_post_bookmarks_count($post_id);
+            $data['bookmark_exist'] = JialiubBookmarkFunctions::getInstance()->bookmarkExists( $user_id, $post_id );
+            $data['bookmarks_count'] = JialiubBookmarkFunctions::getInstance()->getPostBookmarksCount($post_id);
         } else {
             throw new Exception( __( 'An unknown error is occured, Try again!', 'jiali-user-bookmarks' ) , 403 );
         }

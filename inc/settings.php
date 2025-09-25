@@ -253,7 +253,7 @@ function jialiub_plural_label_field() {
  */
 function jialiub_bookmarked_posts_page() {
     $user_id = get_current_user_id();
-    $post_ids = jialiub_get_user_bookmarks($user_id);
+    $post_ids = JialiubBookmarkFunctions::getInstance()->getUserBookmarks($user_id);
 
     $posts = new WP_Query([
         'post__in' => ( empty($post_ids) ? [0] : $post_ids ),
@@ -289,7 +289,7 @@ function jialiub_bookmarked_posts_page() {
  */
 function jialiub_bookmarked_posts_report_page() {
     $user_id = get_current_user_id();
-    $post_ids = jialiub_get_bookmarks($user_id);
+    $post_ids = JialiubBookmarkFunctions::getInstance()->getAllBookmarks($user_id);
     $posts = new WP_Query([
         'post__in' => ( empty($post_ids) ? [0] : $post_ids ),
         'post_type' => 'any',
