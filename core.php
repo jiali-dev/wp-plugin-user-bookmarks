@@ -16,7 +16,28 @@
 // Exit if accessed directly
 if (!defined('ABSPATH')) exit;
 
-// Add functions
-require_once( plugin_dir_path(__FILE__) . '/inc/functions.php' );
+// Include Core class
+require_once plugin_dir_path(__FILE__) . 'JialiubCore.php';
+
+// Start plugin
+JialiubCore::getInstance();
+
+// Activation hook
+register_activation_hook(__FILE__, ['JialiubCore', 'registerActivation']);
+
+// Uninstallation hook
+register_uninstall_hook(__FILE__, ['JialiubCore', 'uninstallation'] );
+
+/*
+Prefix Guidance for Aabgine POS Plugin
+
+Constants:      JIALIUB_      (e.g. JIALIUB_PLUGIN_URL)
+Class Names:    Jialiub       (e.g. JialiubCore )
+DB Tables:      jialiub_         (e.g. jialiub_orders, jialiub_customers)
+Functions:      jialiub_         (e.g.  jialiub_add_bookmark())
+Text Domain:    jiali-user-bookmarks       (for translations)
+
+Always use these prefixes to avoid conflicts and keep code organized.
+*/
 
 ?>
