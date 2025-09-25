@@ -45,7 +45,7 @@ function jialiub_bookmark_button_html() {
                 $bookmarks_exist = JialiubBookmarkFunctions::getInstance()->bookmarkExists(get_current_user_id(  ), $post->ID ) ?>
                 <span class="jialiub-bookmark-button <?php echo ( $bookmarks_exist ? 'jialiub-bookmark-button-active' : '' ) ?>" data-action="bookmark">
                     <i class="jialiub-icon <?php echo ( $bookmarks_exist ? 'fa-solid' : 'fa-regular' ) ?> fa-bookmark"></i>
-                    <?php if( get_option('jialiub_show_lable', '1') === '1' ) : ?>
+                    <?php if( !empty(get_option('jialiub_show_label') ) ):  ?>
                         <span class="jialiub-bookmark-label">
                             <?php echo ( $bookmarks_exist ? JIALIUB_ACTION_LABEL : JIALIUB_SINGULAR_LABEL ); ?>
                         </span>
