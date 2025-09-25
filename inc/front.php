@@ -24,7 +24,7 @@ function jialiub_enqueue_assets() {
  * @return string
  */
 function jialiub_bookmark_button_html() {
-    
+
     global $post;
 
     if (!isset($post)) return '';
@@ -95,3 +95,60 @@ function jialiub_append_buttons_to_content($content) {
     }
 }
 add_filter('the_content', 'jialiub_append_buttons_to_content');
+
+/**
+ * Render the user's bookmarks
+ *
+ * @return string
+ */
+function jialiub_render_user_bookmarks_table( ) {
+
+    $user_id = get_current_user_id();
+    $post_ids = JialiubBookmarkFunctions::getInstance()->getUserBookmarks($user_id);
+    $bookmarks = new WP_Query([
+        'post__in' => ( empty($post_ids) ? [0] : $post_ids ),
+        'post_type' => 'any',
+        'posts_per_page' => -1,
+        'orderby' => 'post__in',
+        'update_post_meta_cache' => false, 
+        'update_post_term_cache' => false,
+        'ignore_sticky_posts' => true 
+    ]);
+
+    if ( empty( $bookmarks ) ) {
+        return '<p>' . esc_html__( 'No bookmarks found.', 'jiali-user-bookmarks' ) . '</p>';
+    }
+
+    $bookmarks = wp_list_pluck( $bookmarks->posts, 'ID' );
+
+    ob_start();
+    ?>
+    <div class="table-responsive">
+        <table class="table data-table tablesorter jialiub-bookmarks-table" role="grid">
+            <thead>
+                <tr>
+                    <th><?php esc_html_e( 'Title', 'jiali-user-bookmarks' ); ?></th>
+                    <th><?php esc_html_e( 'Type', 'jiali-user-bookmarks' ); ?></th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php foreach ( $bookmarks as $bookmark ) :
+                    $post = get_post( $bookmark );
+                    ?>
+                    <tr>
+                        <td>
+                            <a href="<?php echo esc_url( get_permalink( $post ) ); ?>">
+                                <?php echo esc_html( get_the_title( $post ) ); ?>
+                            </a>
+                        </td>
+                        <td>
+                            <?php echo esc_html( get_post_type_object( $post->post_type )->labels->singular_name ); ?>
+                        </td>
+                    </tr>
+                <?php endforeach; ?>
+            </tbody>
+        </table>
+    </div>
+    <?php
+    return ob_get_clean();
+}

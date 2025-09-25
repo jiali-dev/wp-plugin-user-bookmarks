@@ -86,7 +86,7 @@ class JialiubCore {
     }
 
     public function adminRegisterAssets() {
-        //    wp_enqueue_style('ab-admin-style', JIALIUB_PLUGIN_URL . 'assets/css/admin-style.css', [], '1.0.0');    
+        JialiubRegisterAssets::adminRegisterAssets();
     }
 
     public static function uninstallation() {

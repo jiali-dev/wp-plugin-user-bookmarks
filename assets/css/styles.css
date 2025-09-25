@@ -25,3 +25,14 @@
 .jialiub-bookmark span:hover {
   color: #e63946; /* Highlight color on hover */
 }
+
+.table-responsive {
+  width: 100%;
+  overflow-x: auto;
+  background: #fff;
+}
+
+.jialiub-bookmarks-table td a {
+  color: #1d4ed8;
+  text-decoration: none;  
+}

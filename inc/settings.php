@@ -307,6 +307,7 @@ function jialiub_show_label_field() {
  * Bookmark Posts Page
  */
 function jialiub_bookmarked_posts_page() {
+    
     $user_id = get_current_user_id();
     $post_ids = JialiubBookmarkFunctions::getInstance()->getUserBookmarks($user_id);
 
@@ -337,6 +338,8 @@ function jialiub_bookmarked_posts_page() {
         $table->prepared_items();
         $table->display();
     echo '</form></div>';
+
+    echo do_shortcode( '[jialiub_render_user_bookmarks_table]' );
 }
 
 /**
