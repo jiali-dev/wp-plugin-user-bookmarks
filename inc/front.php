@@ -23,7 +23,8 @@ function jialiub_enqueue_assets() {
  * @param array $enabled_for_bookmark
  * @return string
  */
-function jialiub_get_bookmark_button_html() {
+function jialiub_bookmark_button_html() {
+    
     global $post;
 
     if (!isset($post)) return '';
@@ -71,7 +72,7 @@ function jialiub_append_buttons_to_content($content) {
 
     jialiub_enqueue_assets();
 
-    $buttons_html = jialiub_get_bookmark_button_html();
+    $buttons_html = jialiub_bookmark_button_html();
 
     $position = get_option('jialiub_button_position', 'after');
 
