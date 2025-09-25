@@ -320,7 +320,7 @@ function jialiub_bookmarked_posts_page() {
         'ignore_sticky_posts' => true 
     ]);
 
-    $table = new Jialiub_Posts_List_Table([
+    $table = new JialiubPostsListTable([
         'posts' => $posts->posts,
         'columns' => [
             'title'  => __('Title'),
@@ -355,7 +355,7 @@ function jialiub_bookmarked_posts_report_page() {
         'ignore_sticky_posts' => true 
     ]);
 
-    $table = new Jialiub_Posts_List_Table([
+    $table = new JialiubPostsListTable([
         'posts' => $posts->posts,
         'columns' => [
             'title'  => __('Title'),
