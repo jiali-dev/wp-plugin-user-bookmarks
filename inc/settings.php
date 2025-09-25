@@ -158,7 +158,7 @@ function jialiub_register_settings() {
 
         register_setting('jialiub_settings_group', 'jialiub_plural_label', [
             'type' => 'string',
-            'default' => sprintf( esc_html__('%s', 'jiali-user-bookmarks'), JIALIUB_SINGULAR_LABEL ),
+            'default' => sprintf( esc_html__('%s', 'jiali-user-bookmarks'), JIALIUB_PLURAL_LABEL ),
             'sanitize_callback' => 'sanitize_text_field',
             'capability' => 'manage_options',
         ]);
@@ -170,7 +170,39 @@ function jialiub_register_settings() {
             'jialiub-user-bookmarks',
             'jialiub_main_settings_section'
         );
+
+        register_setting('jialiub_settings_group', 'jialiub_action_label', [
+            'type' => 'string',
+            'default' => sprintf( esc_html__('%s', 'jiali-user-bookmarks'), JIALIUB_ACTION_LABEL ),
+            'sanitize_callback' => 'sanitize_text_field',
+            'capability' => 'manage_options',
+        ]);
         
+        add_settings_field(
+            'jialiub_action_label',
+            esc_html__('Action Label', 'jiali-user-bookmarks'),
+            'jialiub_action_label_field',
+            'jialiub-user-bookmarks',
+            'jialiub_main_settings_section'
+        );
+        
+        register_setting('jialiub_settings_group', 'jialiub_show_label', [
+            'type' => 'boolean',
+            'default' => false,
+            'sanitize_callback' => function( $value ) {
+                return (bool) $value;
+            },  
+            'capability' => 'manage_options',
+        ]);
+        
+        add_settings_field(
+            'jialiub_show_label',
+            esc_html__('Show Label', 'jiali-user-bookmarks'),
+            'jialiub_show_label_field',
+            'jialiub-user-bookmarks',
+            'jialiub_main_settings_section'
+        );
+
         // Style section (optional access control)
         add_settings_section(
             'jialiub_style_settings_section',
@@ -245,6 +277,29 @@ function jialiub_plural_label_field() {
     ?>
     <input type="text" name="jialiub_plural_label" value="<?php echo esc_attr($value); ?>" class="regular-text" />
     <p class="description"><?php esc_html_e('E.g. Bookmark, Favorite, Item', 'jiali-user-bookmarks'); ?></p>
+    <?php
+}
+
+/* 
+ * Field for action label
+*/
+function jialiub_action_label_field() {
+    if (!current_user_can('manage_options')) return;
+    $value = JIALIUB_ACTION_LABEL;
+    ?>
+    <input type="text" name="jialiub_action_label" value="<?php echo esc_attr($value); ?>" class="regular-text" />
+    <p class="description"><?php esc_html_e('E.g. Bookmark, Favorite, Item', 'jiali-user-bookmarks'); ?></p>
+    <?php
+}
+
+// Callback for field
+function jialiub_show_label_field() {
+    $value = get_option('jialiub_show_label', false);
+    ?>
+    <label>
+        <input type="checkbox" name="jialiub_show_label" value="1" <?php checked($value, true); ?>>
+        <?php esc_html_e('Show label next to icon/button', 'jiali-user-bookmarks'); ?>
+    </label>
     <?php
 }
 

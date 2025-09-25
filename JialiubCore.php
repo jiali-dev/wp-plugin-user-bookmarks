@@ -43,8 +43,10 @@ class JialiubCore {
         define('JIALIUB_JS_URI', JIALIUB_ASSETS_URI . 'js');
         $singular = get_option('jialiub_singular_label');
         $plural = get_option('jialiub_plural_label');
+        $action = get_option('jialiub_action_label');
         define('JIALIUB_SINGULAR_LABEL', !empty($singular) ? $singular : esc_html__( 'Bookmark', 'jiali-user-bookmarks' ) );
         define('JIALIUB_PLURAL_LABEL', !empty($plural) ? $plural : esc_html__( 'Bookmarks', 'jiali-user-bookmarks' ) );
+        define('JIALIUB_ACTION_LABEL', !empty($action) ? $action : esc_html__( 'Bookmarked', 'jiali-user-bookmarks' ) );
     }
 
     private function init() {
