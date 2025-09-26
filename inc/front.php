@@ -101,11 +101,70 @@ add_filter('the_content', 'jialiub_append_buttons_to_content');
  *
  * @return string
  */
-function jialiub_render_user_bookmarks_table( ) {
+function jialiub_render_user_bookmarks_table() {
+    $paged    = isset($_GET['ubm_page']) ? absint($_GET['ubm_page']) : 1;
+    $per_page = 10;
+    $user_id  = get_current_user_id();
 
-    $user_id = get_current_user_id();
-    $post_ids = JialiubBookmarkFunctions::getInstance()->getUserBookmarks($user_id);
+    $bookmarked_ids = JialiubBookmarkFunctions::getInstance()->getUserBookmarks($user_id);
+
+    if (empty($bookmarked_ids)) {
+        return '<p>' . esc_html__('No bookmarks found.', 'jiali-user-bookmarks') . '</p>';
+    }
+
     $bookmarks = new WP_Query([
+        'post__in'               => $bookmarked_ids,
+        'post_type'              => 'any',
+        'posts_per_page'         => $per_page,
+        'paged'                  => $paged,
+        'orderby'                => 'post__in',
+        'update_post_meta_cache' => false,
+        'update_post_term_cache' => false,
+        'ignore_sticky_posts'    => true,
+    ]);
+
+    ob_start();
+    ?>
+    <div class="table-responsive">
+        <table class="jialiub-bookmarks-table table table-striped table-row-bordered display" id="jialiub-bookmarks-table" role="grid">
+            <thead>
+                <tr>
+                    <th><?php esc_html_e('Title', 'jiali-user-bookmarks'); ?></th>
+                    <th><?php esc_html_e('Author', 'jiali-user-bookmarks'); ?></th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php while ($bookmarks->have_posts()): $bookmarks->the_post(); ?>
+                    <tr>
+                        <td><a href="<?php the_permalink(); ?>"><?php the_title(); ?></a></td>
+                        <td><?php the_author(); ?></td>
+                    </tr>
+                <?php endwhile; wp_reset_postdata(); ?>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="jialiub-pagination">
+        <?php
+        echo paginate_links([
+            'total'   => $bookmarks->max_num_pages,
+            'current' => $paged,
+            'format'  => '?ubm_page=%#%',
+        ]);
+        ?>
+    </div>
+    <?php
+
+    return ob_get_clean();
+}
+
+/**
+ * Bookmark Posts Report Page
+ */
+function jialiub_bookmarked_posts_report_page() {
+    $user_id = get_current_user_id();
+    $post_ids = JialiubBookmarkFunctions::getInstance()->getAllBookmarks($user_id);
+    $posts = new WP_Query([
         'post__in' => ( empty($post_ids) ? [0] : $post_ids ),
         'post_type' => 'any',
         'posts_per_page' => -1,
@@ -115,40 +174,22 @@ function jialiub_render_user_bookmarks_table( ) {
         'ignore_sticky_posts' => true 
     ]);
 
-    if ( empty( $bookmarks ) ) {
-        return '<p>' . esc_html__( 'No bookmarks found.', 'jiali-user-bookmarks' ) . '</p>';
-    }
+    $table = new JialiubPostsListTable([
+        'posts' => $posts->posts,
+        'columns' => [
+            'title'  => __('Title'),
+            'author' => __('Author'),
+            'count' => __('Count'),
+        ],
+        'sortable_columns' => [
+            'title' => ['post_title', true],
+            'count' => ['count', true],
+        ],
+    ]);
 
-    $bookmarks = wp_list_pluck( $bookmarks->posts, 'ID' );
-
-    ob_start();
-    ?>
-    <div class="table-responsive">
-        <table class="table data-table tablesorter jialiub-bookmarks-table" role="grid">
-            <thead>
-                <tr>
-                    <th><?php esc_html_e( 'Title', 'jiali-user-bookmarks' ); ?></th>
-                    <th><?php esc_html_e( 'Type', 'jiali-user-bookmarks' ); ?></th>
-                </tr>
-            </thead>
-            <tbody>
-                <?php foreach ( $bookmarks as $bookmark ) :
-                    $post = get_post( $bookmark );
-                    ?>
-                    <tr>
-                        <td>
-                            <a href="<?php echo esc_url( get_permalink( $post ) ); ?>">
-                                <?php echo esc_html( get_the_title( $post ) ); ?>
-                            </a>
-                        </td>
-                        <td>
-                            <?php echo esc_html( get_post_type_object( $post->post_type )->labels->singular_name ); ?>
-                        </td>
-                    </tr>
-                <?php endforeach; ?>
-            </tbody>
-        </table>
-    </div>
-    <?php
-    return ob_get_clean();
+    echo '<div class="wrap"><h1>'.sprintf( esc_html__('%s', 'jiali-user-bookmarks'), JIALIUB_PLURAL_LABEL ).'</h1>';
+    echo '<form method="post">';
+        $table->prepared_items();
+        $table->display();
+    echo '</form></div>';
 }

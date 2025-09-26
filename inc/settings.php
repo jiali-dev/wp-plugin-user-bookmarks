@@ -20,6 +20,7 @@ add_filter('plugin_action_links_' . plugin_basename(__FILE__), 'jialiub_add_plug
  * Add admin menu and submenus
  */
 function jialiub_add_admin_menu() {
+    
     // Show main menu only to users who can manage options (e.g., admins)
     if (current_user_can('manage_options')) {
         add_menu_page(
@@ -41,38 +42,19 @@ function jialiub_add_admin_menu() {
             'jialiub-user-bookmarks',
             'jialiub_settings_page'
         );
+        
+    } 
 
-        // My Bookmarks
-        add_submenu_page(
-            'jialiub-user-bookmarks',
-            sprintf( esc_html__('My %s', 'jiali-user-bookmarks'), JIALIUB_PLURAL_LABEL ),
-            sprintf( esc_html__('My %s', 'jiali-user-bookmarks'), JIALIUB_PLURAL_LABEL ),
-            'manage_options',
-            'jialiub-bookmarked-posts',
-            'jialiub_bookmarked_posts_page',
-        );
-
-        // Bookmarks Posts Report - only admins
-        add_submenu_page(
-            'jialiub-user-bookmarks',
-            sprintf( esc_html__('%s Report', 'jiali-user-bookmarks'), JIALIUB_PLURAL_LABEL ),
-            sprintf( esc_html__('%s Report', 'jiali-user-bookmarks'), JIALIUB_PLURAL_LABEL ),
-            'manage_options',
-            'jialiub-bookmarked-posts-report',
-            'jialiub_bookmarked_posts_report_page'
-        );
-    } else {
-        // Add only the "My Bookmarked Posts" page for all logged-in users
-        add_menu_page(
-            sprintf( esc_html__('My %s', 'jiali-user-bookmarks'), JIALIUB_PLURAL_LABEL ),
-            sprintf( esc_html__('My %s', 'jiali-user-bookmarks'), JIALIUB_PLURAL_LABEL ),
-            'read',
-            'jialiub-bookmarked-posts',
-            'jialiub_bookmarked_posts_page',
-            'dashicons-plus',
-            66
-        );
-    }
+    // Bookmarks Posts Report
+    add_submenu_page(
+        'jialiub-user-bookmarks',
+        sprintf( esc_html__('%s Report', 'jiali-user-bookmarks'), JIALIUB_PLURAL_LABEL ),
+        sprintf( esc_html__('%s Report', 'jiali-user-bookmarks'), JIALIUB_PLURAL_LABEL ),
+        'manage_options',
+        'jialiub-bookmarked-posts-report',
+        'jialiub_bookmarked_posts_report_page'
+    );
+    
 
 }
 add_action('admin_menu', 'jialiub_add_admin_menu');
@@ -301,81 +283,6 @@ function jialiub_show_label_field() {
         <?php esc_html_e('Show label next to icon/button', 'jiali-user-bookmarks'); ?>
     </label>
     <?php
-}
-
-/**
- * Bookmark Posts Page
- */
-function jialiub_bookmarked_posts_page() {
-    
-    $user_id = get_current_user_id();
-    $post_ids = JialiubBookmarkFunctions::getInstance()->getUserBookmarks($user_id);
-
-    $posts = new WP_Query([
-        'post__in' => ( empty($post_ids) ? [0] : $post_ids ),
-        'post_type' => 'any',
-        'posts_per_page' => -1,
-        'orderby' => 'post__in',
-        'update_post_meta_cache' => false, 
-        'update_post_term_cache' => false,
-        'ignore_sticky_posts' => true 
-    ]);
-
-    $table = new JialiubPostsListTable([
-        'posts' => $posts->posts,
-        'columns' => [
-            'title'  => __('Title'),
-            'author' => __('Author'),
-        ],
-        'sortable_columns' => [
-            'title' => ['post_title', true],
-        ]
-        
-    ]);
-
-    echo '<div class="wrap"><h1>'.sprintf( esc_html__('My %s', 'jiali-user-bookmarks'), JIALIUB_PLURAL_LABEL ).'</h1>';
-    echo '<form method="post">';
-        $table->prepared_items();
-        $table->display();
-    echo '</form></div>';
-
-    echo do_shortcode( '[jialiub_render_user_bookmarks_table]' );
-}
-
-/**
- * Bookmark Posts Report Page
- */
-function jialiub_bookmarked_posts_report_page() {
-    $user_id = get_current_user_id();
-    $post_ids = JialiubBookmarkFunctions::getInstance()->getAllBookmarks($user_id);
-    $posts = new WP_Query([
-        'post__in' => ( empty($post_ids) ? [0] : $post_ids ),
-        'post_type' => 'any',
-        'posts_per_page' => -1,
-        'orderby' => 'post__in',
-        'update_post_meta_cache' => false, 
-        'update_post_term_cache' => false,
-        'ignore_sticky_posts' => true 
-    ]);
-
-    $table = new JialiubPostsListTable([
-        'posts' => $posts->posts,
-        'columns' => [
-            'title'  => __('Title'),
-            'author' => __('Author'),
-            'count' => __('Count'),
-        ],
-        'sortable_columns' => [
-            'title' => ['post_title', true],
-            'count' => ['count', true],
-        ],
-    ]);
-
-    echo '<div class="wrap"><h1>'.sprintf( esc_html__('%s', 'jiali-user-bookmarks'), JIALIUB_PLURAL_LABEL ).'</h1>';
-    echo '<form method="post">';
-        $table->prepared_items();
-        $table->display();
-    echo '</form></div>';
 }
 
 ?>

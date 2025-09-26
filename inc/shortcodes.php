@@ -27,7 +27,7 @@ function jialiub_user_bookmarks_table_shortcode($atts) {
     wp_enqueue_script('jialiub-datatable');
     wp_enqueue_script('jialiub-datatable-custom');
     wp_enqueue_style('jialiub-styles');
-    
+
     return jialiub_render_user_bookmarks_table();
 }
 add_shortcode('jialiub_render_user_bookmarks_table', 'jialiub_user_bookmarks_table_shortcode');
