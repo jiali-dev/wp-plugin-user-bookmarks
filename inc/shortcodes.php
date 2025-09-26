@@ -10,8 +10,6 @@ if (!defined('ABSPATH')) exit;
  */
 function jialiub_bookmark_button_shortcode($atts) {
 
-    jialiub_enqueue_assets();
-
     return jialiub_bookmark_button_html();
 }
 add_shortcode('jialiub_bookmark_button', 'jialiub_bookmark_button_shortcode');

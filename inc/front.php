@@ -4,19 +4,6 @@
 if (!defined('ABSPATH')) exit;
 
 /**
- * Enqueue necessary scripts and styles once
- */
-function jialiub_enqueue_assets() {
-    wp_enqueue_style('jialiub-fontawesome');
-    wp_enqueue_script('jialiub-fontawesome');
-    wp_enqueue_style('jialiub-notiflix');
-    wp_enqueue_script('jialiub-notiflix');
-    wp_enqueue_script('jialiub-notiflix-custom');
-    wp_enqueue_style('jialiub-styles');
-    wp_enqueue_script('jialiub-script');
-}
-
-/**
  * Generate the bookmark buttons based on settings
  *
  * @param string $post_type
@@ -25,6 +12,14 @@ function jialiub_enqueue_assets() {
  */
 function jialiub_bookmark_button_html() {
 
+    wp_enqueue_style('jialiub-fontawesome');
+    wp_enqueue_script('jialiub-fontawesome');
+    wp_enqueue_style('jialiub-notiflix');
+    wp_enqueue_script('jialiub-notiflix');
+    wp_enqueue_script('jialiub-notiflix-custom');
+    wp_enqueue_style('jialiub-styles');
+    wp_enqueue_script('jialiub-script');
+    
     global $post;
 
     if (!isset($post)) return '';
@@ -82,8 +77,6 @@ function jialiub_append_buttons_to_content($content) {
         return $content;
     }
 
-    jialiub_enqueue_assets();
-
     $buttons_html = jialiub_bookmark_button_html();
 
     $position = get_option('jialiub_button_position', 'after');
@@ -101,7 +94,8 @@ add_filter('the_content', 'jialiub_append_buttons_to_content');
  *
  * @return string
  */
-function jialiub_render_user_bookmarks_table() {
+function jialiub_render_user_bookmarks_table( $table_type = 'datatable' ) {
+
     $paged    = isset($_GET['ubm_page']) ? absint($_GET['ubm_page']) : 1;
     $per_page = 10;
     $user_id  = get_current_user_id();
@@ -125,35 +119,61 @@ function jialiub_render_user_bookmarks_table() {
 
     ob_start();
     ?>
-    <div class="table-responsive">
-        <table class="jialiub-bookmarks-table table table-striped table-row-bordered display" id="jialiub-bookmarks-table" role="grid">
-            <thead>
-                <tr>
-                    <th><?php esc_html_e('Title', 'jiali-user-bookmarks'); ?></th>
-                    <th><?php esc_html_e('Author', 'jiali-user-bookmarks'); ?></th>
-                </tr>
-            </thead>
-            <tbody>
-                <?php while ($bookmarks->have_posts()): $bookmarks->the_post(); ?>
-                    <tr>
-                        <td><a href="<?php the_permalink(); ?>"><?php the_title(); ?></a></td>
-                        <td><?php the_author(); ?></td>
-                    </tr>
-                <?php endwhile; wp_reset_postdata(); ?>
-            </tbody>
-        </table>
-    </div>
 
-    <div class="jialiub-pagination">
-        <?php
-        echo paginate_links([
-            'total'   => $bookmarks->max_num_pages,
-            'current' => $paged,
-            'format'  => '?ubm_page=%#%',
+    <?php if( $table_type === 'datatable' ): ?>
+        
+        <div class="table-responsive">
+            <table class="jialiub-bookmarks-table table table-striped table-row-bordered display" id="jialiub-bookmarks-table" role="grid">
+                <thead>
+                    <tr>
+                        <th><?php esc_html_e('Title', 'jiali-user-bookmarks'); ?></th>
+                        <th><?php esc_html_e('Author', 'jiali-user-bookmarks'); ?></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php while ($bookmarks->have_posts()): $bookmarks->the_post(); ?>
+                        <tr>
+                            <td><a href="<?php the_permalink(); ?>"><?php the_title(); ?></a></td>
+                            <td><?php the_author(); ?></td>
+                        </tr>
+                    <?php endwhile; wp_reset_postdata(); ?>
+                </tbody>
+            </table>
+
+            <div class="jialiub-pagination">
+                <?php
+                echo paginate_links([
+                    'total'   => $bookmarks->max_num_pages,
+                    'current' => $paged,
+                    'format'  => '?ubm_page=%#%',
+                ]);
+                ?>
+            </div>
+        </div>
+
+    <?php elseif($table_type === 'listtable'): 
+        $table = new JialiubPostsListTable([
+            'posts' => $posts->posts,
+            'columns' => [
+                'title'  => __('Title'),
+                'author' => __('Author'),
+                'count' => __('Count'),
+            ],
+            'sortable_columns' => [
+                'title' => ['post_title', true],
+                'count' => ['count', true],
+            ],
         ]);
         ?>
-    </div>
-    <?php
+        <div class="wrap"><h1><?php sprintf( esc_html__('%s', 'jiali-user-bookmarks'), JIALIUB_PLURAL_LABEL ) ?></h1>
+            <form method="post">
+                <?php
+                    $table->prepared_items();
+                    $table->display();
+                ?>
+            </form>
+        </div>
+    <?php endif; 
 
     return ob_get_clean();
 }
@@ -162,34 +182,5 @@ function jialiub_render_user_bookmarks_table() {
  * Bookmark Posts Report Page
  */
 function jialiub_bookmarked_posts_report_page() {
-    $user_id = get_current_user_id();
-    $post_ids = JialiubBookmarkFunctions::getInstance()->getAllBookmarks($user_id);
-    $posts = new WP_Query([
-        'post__in' => ( empty($post_ids) ? [0] : $post_ids ),
-        'post_type' => 'any',
-        'posts_per_page' => -1,
-        'orderby' => 'post__in',
-        'update_post_meta_cache' => false, 
-        'update_post_term_cache' => false,
-        'ignore_sticky_posts' => true 
-    ]);
-
-    $table = new JialiubPostsListTable([
-        'posts' => $posts->posts,
-        'columns' => [
-            'title'  => __('Title'),
-            'author' => __('Author'),
-            'count' => __('Count'),
-        ],
-        'sortable_columns' => [
-            'title' => ['post_title', true],
-            'count' => ['count', true],
-        ],
-    ]);
-
-    echo '<div class="wrap"><h1>'.sprintf( esc_html__('%s', 'jiali-user-bookmarks'), JIALIUB_PLURAL_LABEL ).'</h1>';
-    echo '<form method="post">';
-        $table->prepared_items();
-        $table->display();
-    echo '</form></div>';
+    return do_action('[jialiub_render_user_bookmarks_table table_type="datatable"]');
 }
