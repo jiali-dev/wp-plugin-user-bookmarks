@@ -71,15 +71,19 @@ function jialiub_get_user_bookmarks_ajax() {
         if ( empty($nonce) || !wp_verify_nonce($nonce, 'jialiub-nonce') )
             throw new Exception( __( 'Security error!', 'jiali-user-bookmarks' ), 403 );
 
-        $paged = isset($_POST['start']) ? floor(intval($_POST['start']) / intval($_POST['length'])) + 1 : 1;
-        $per_page = intval($_POST['length']) ?: 10;
+        $length = isset($_POST['length']) ? intval($_POST['length']) : 10;
+        $paged  = isset($_POST['start']) ? floor(intval($_POST['start']) / $length) + 1 : 1;
+
+        $per_page = $length ?: 10;
 
         $user_id = get_current_user_id();
         $bookmarked_ids = JialiubBookmarkFunctions::getInstance()->getUserBookmarks($user_id);
 
+        $draw = isset($_POST['draw']) ? intval($_POST['draw']) : 1;
+
         if(empty($bookmarked_ids)) {
             wp_send_json([
-                'draw' => intval($_POST['draw']),
+                'draw' => $draw,
                 'recordsTotal' => 0,
                 'recordsFiltered' => 0,
                 'data' => []
@@ -106,14 +110,13 @@ function jialiub_get_user_bookmarks_ajax() {
         }
 
         wp_send_json([
-            'draw' => intval($_POST['draw']),
+            'draw' => $draw,
             'recordsTotal' => count($bookmarked_ids),
             'recordsFiltered' => count($bookmarked_ids),
             'data' => $data
         ]);
         
     } catch( Exception $ex ) {
-        error_log('Jialiub AJAX error: ' . $e->getMessage());
         wp_send_json([
             'draw' => intval($_POST['draw'] ?? 1),
             'recordsTotal' => 0,
@@ -134,15 +137,14 @@ function jialiub_get_top_bookmarks_ajax() {
         if ( empty($nonce) || !wp_verify_nonce($nonce, 'jialiub-nonce') )
             throw new Exception( __( 'Security error!', 'jiali-user-bookmarks' ), 403 );
 
-        $paged = isset($_POST['start']) ? floor(intval($_POST['start']) / intval($_POST['length'])) + 1 : 1;
-        $per_page = intval($_POST['length']) ?: 10;
-
         $user_id = get_current_user_id();
         $bookmarked_ids = JialiubBookmarkFunctions::getInstance()->getTopBookmarks();
 
+        $draw = isset($_POST['draw']) ? intval($_POST['draw']) : 1;
+
         if(empty($bookmarked_ids)) {
             wp_send_json([
-                'draw' => intval($_POST['draw']),
+                'draw' => $draw,
                 'recordsTotal' => 0,
                 'recordsFiltered' => 0,
                 'data' => []
@@ -152,8 +154,7 @@ function jialiub_get_top_bookmarks_ajax() {
         $query = new WP_Query([
             'post__in'               => $bookmarked_ids,
             'post_type'              => 'any',
-            'posts_per_page'         => $per_page,
-            'paged'                  => $paged,
+            'posts_per_page'         => -1,
             'orderby'                => 'post__in',
             'update_post_meta_cache' => false,
             'update_post_term_cache' => false,
@@ -170,14 +171,13 @@ function jialiub_get_top_bookmarks_ajax() {
         }
 
         wp_send_json([
-            'draw' => intval($_POST['draw']),
+            'draw' => $draw,
             'recordsTotal' => count($bookmarked_ids),
             'recordsFiltered' => count($bookmarked_ids),
             'data' => $data
         ]);
         
     } catch( Exception $ex ) {
-        error_log('Jialiub AJAX error: ' . $e->getMessage());
         wp_send_json([
             'draw' => intval($_POST['draw'] ?? 1),
             'recordsTotal' => 0,
