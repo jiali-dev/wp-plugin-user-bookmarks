@@ -101,84 +101,27 @@ function jialiub_render_user_bookmarks_table( ) {
     wp_enqueue_script('jialiub-datatable-custom');
     wp_enqueue_style('jialiub-styles');
 
-    $paged    = isset($_GET['ubm_page']) ? absint($_GET['ubm_page']) : 1;
-    $per_page = 10;
-    $user_id  = get_current_user_id();
-
-    $bookmarked_ids = JialiubBookmarkFunctions::getInstance()->getUserBookmarks($user_id);
-
-    if (empty($bookmarked_ids)) {
-        return '<p>' . esc_html__('No bookmarks found.', 'jiali-user-bookmarks') . '</p>';
-    }
-
-    $bookmarks = new WP_Query([
-        'post__in'               => $bookmarked_ids,
-        'post_type'              => 'any',
-        'posts_per_page'         => $per_page,
-        'paged'                  => $paged,
-        'orderby'                => 'post__in',
-        'update_post_meta_cache' => false,
-        'update_post_term_cache' => false,
-        'ignore_sticky_posts'    => true,
-    ]);
-
     ob_start();
     ?>
 
-    <?php if ($bookmarks->have_posts()): ?>
-        <h2><?php sprintf( esc_html__('User %s', 'jiali-user-bookmarks'), JIALIUB_PLURAL_LABEL ) ?></h2>
-        <div class="table-responsive">
-            <table class="jialiub-bookmarks-table table table-striped table-row-bordered display" id="jialiub-bookmarks-table" role="grid">
-                <thead>
-                    <tr>
-                        <th><?php esc_html_e('Title', 'jiali-user-bookmarks'); ?></th>
-                        <th><?php esc_html_e('Author', 'jiali-user-bookmarks'); ?></th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <?php while ($bookmarks->have_posts()): $bookmarks->the_post(); ?>
-                        <tr>
-                            <td><a href="<?php the_permalink(); ?>"><?php the_title(); ?></a></td>
-                            <td><?php the_author(); ?></td>
-                        </tr>
-                    <?php endwhile; wp_reset_postdata(); ?>
-                </tbody>
-                <tfoot>
-                    <tr>
-                        <th><?php esc_html_e('Title', 'jiali-user-bookmarks'); ?></th>
-                        <th><?php esc_html_e('Author', 'jiali-user-bookmarks'); ?></th>
-                    </tr>
-                </tfoot>
-            </table>
+    <h2><?php sprintf( esc_html__('User %s', 'jiali-user-bookmarks'), JIALIUB_PLURAL_LABEL ) ?></h2>
+    <div class="table-responsive">
+        <table class="jialiub-bookmarks-table table table-striped table-row-bordered display" id="jialiub-bookmarks-table" role="grid">
+            <thead>
+                <tr>
+                    <th><?php esc_html_e('Title', 'jiali-user-bookmarks'); ?></th>
+                    <th><?php esc_html_e('Author', 'jiali-user-bookmarks'); ?></th>
+                </tr>
+            </thead>
+            <tfoot>
+                <tr>
+                    <th><?php esc_html_e('Title', 'jiali-user-bookmarks'); ?></th>
+                    <th><?php esc_html_e('Author', 'jiali-user-bookmarks'); ?></th>
+                </tr>
+            </tfoot>
+        </table>
 
-            <div class="jialiub-pagination">
-                <?php
-                    if ( is_admin() ) {
-                        // 🔹 Admin side
-                        $base = add_query_arg(
-                            [
-                                'page'     => 'jialiub-bookmarked-posts-report',
-                                'ubm_page' => '%#%',
-                            ],
-                            admin_url( 'admin.php' )
-                        );
-                    } else {
-                        // 🔹 Frontend side
-                        global $wp;
-                        $base = add_query_arg( 'ubm_page', '%#%', home_url( $wp->request ) );
-                    }
-                    echo paginate_links( [
-                        'base'    => $base,
-                        'format'  => '',                  // not needed because we use add_query_arg
-                        'current' => $paged,              // your current page number
-                        'total'   => $bookmarks->max_num_pages, // total pages from WP_Query
-                        'prev_text' => __('«', 'jialiub'), 
-                        'next_text' => __('»', 'jialiub'),     
-                    ] );
-                ?>
-            </div>
-        </div>
-    <?php endif;
-
+    </div>
+    <?php
     return ob_get_clean();
 }
