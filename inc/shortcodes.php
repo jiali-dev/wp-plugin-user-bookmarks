@@ -17,15 +17,9 @@ add_shortcode('jialiub_bookmark_button', 'jialiub_bookmark_button_shortcode');
 /**
  * Shortcode handler for displaying user's bookmarks table
  *
- * Usage: [jialiub_render_user_bookmarks_table]
+ * Usage: [jialiub_user_bookmarks_table]
  */
-function jialiub_user_bookmarks_table_shortcode($atts) {  
-    
-    wp_enqueue_style('jialiub-datatable');
-    wp_enqueue_script('jialiub-datatable');
-    wp_enqueue_script('jialiub-datatable-custom');
-    wp_enqueue_style('jialiub-styles');
-
+function jialiub_user_bookmarks_table_shortcode($atts) { 
     return jialiub_render_user_bookmarks_table();
 }
-add_shortcode('jialiub_render_user_bookmarks_table', 'jialiub_user_bookmarks_table_shortcode');
+add_shortcode('jialiub_user_bookmarks_table', 'jialiub_user_bookmarks_table_shortcode');

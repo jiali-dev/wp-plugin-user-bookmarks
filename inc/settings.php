@@ -285,4 +285,12 @@ function jialiub_show_label_field() {
     <?php
 }
 
+
+/**
+ * Bookmark Posts Report Page
+ */
+function jialiub_bookmarked_posts_report_page() {
+    echo jialiub_render_user_bookmarks_table();
+}
+
 ?>

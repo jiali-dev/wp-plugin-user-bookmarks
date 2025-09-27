@@ -61,7 +61,6 @@ class JialiubCore {
         include_once(JIALIUB_PLUGIN_PATH.'inc/settings.php');
         include_once(JIALIUB_PLUGIN_PATH.'inc/shortcodes.php');
         include_once(JIALIUB_PLUGIN_PATH.'inc/ajax-functions.php');
-        include_once(JIALIUB_CLASSES_PATH.'JialiubPostsListTable.php');
         
     }
 
