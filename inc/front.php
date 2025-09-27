@@ -96,17 +96,19 @@ add_filter('the_content', 'jialiub_append_buttons_to_content');
  */
 function jialiub_render_user_bookmarks_table( ) {
 
+    wp_enqueue_script('jialiub-script');
+
     wp_enqueue_style('jialiub-datatable');
     wp_enqueue_script('jialiub-datatable');
     wp_enqueue_script('jialiub-datatable-custom');
+
     wp_enqueue_style('jialiub-styles');
 
     ob_start();
     ?>
 
-    <h2><?php sprintf( esc_html__('User %s', 'jiali-user-bookmarks'), JIALIUB_PLURAL_LABEL ) ?></h2>
     <div class="table-responsive">
-        <table class="jialiub-bookmarks-table table table-striped table-row-bordered display" id="jialiub-bookmarks-table" role="grid">
+        <table class="jialiub-bookmarks-table jialiub-user-bookmarks-table table table-striped table-row-bordered display" role="grid">
             <thead>
                 <tr>
                     <th><?php esc_html_e('Title', 'jiali-user-bookmarks'); ?></th>
@@ -117,6 +119,51 @@ function jialiub_render_user_bookmarks_table( ) {
                 <tr>
                     <th><?php esc_html_e('Title', 'jiali-user-bookmarks'); ?></th>
                     <th><?php esc_html_e('Author', 'jiali-user-bookmarks'); ?></th>
+                </tr>
+            </tfoot>
+        </table>
+
+    </div>
+    <?php
+    return ob_get_clean();
+}
+
+/**
+ * Render the All bookmarks
+ *
+ * @return string
+ */
+function jialiub_render_all_bookmarks_table( ) {
+
+    wp_enqueue_script('jialiub-script');
+
+    wp_enqueue_style('jialiub-datatable');
+    wp_enqueue_script('jialiub-datatable');
+    wp_enqueue_script('jialiub-datatable-custom');
+    
+    wp_enqueue_style('jialiub-styles');
+
+    if( !current_user_can('manage_options') )
+        return;
+   
+    ob_start();
+    ?>
+
+    
+    <div class="table-responsive">
+        <table class="jialiub-bookmarks-table jialiub-all-bookmarks-table table table-striped table-row-bordered display" role="grid">
+            <thead>
+                <tr>
+                    <th><?php esc_html_e('Title', 'jiali-user-bookmarks'); ?></th>
+                    <th><?php esc_html_e('Author', 'jiali-user-bookmarks'); ?></th>
+                    <th><?php esc_html_e('Count', 'jiali-user-bookmarks'); ?></th>
+                </tr>
+            </thead>
+            <tfoot>
+                <tr>
+                    <th><?php esc_html_e('Title', 'jiali-user-bookmarks'); ?></th>
+                    <th><?php esc_html_e('Author', 'jiali-user-bookmarks'); ?></th>
+                    <th><?php esc_html_e('Count', 'jiali-user-bookmarks'); ?></th>
                 </tr>
             </tfoot>
         </table>

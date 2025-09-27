@@ -22,3 +22,13 @@ function jialiub_user_bookmarks_table_shortcode($atts) {
     return jialiub_render_user_bookmarks_table();
 }
 add_shortcode('jialiub_user_bookmarks_table', 'jialiub_user_bookmarks_table_shortcode');
+
+/**
+ * Shortcode handler for displaying all bookmarks table
+ *
+ * Usage: [jialiub_all_bookmarks_table]
+ */
+function jialiub_all_bookmarks_table_shortcode($atts) { 
+    return jialiub_render_all_bookmarks_table();
+}
+add_shortcode('jialiub_all_bookmarks_table', 'jialiub_all_bookmarks_table_shortcode');

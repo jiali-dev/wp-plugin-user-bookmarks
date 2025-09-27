@@ -282,7 +282,13 @@ function jialiub_show_label_field() {
  * Bookmark Posts Report Page
  */
 function jialiub_bookmarked_posts_report_page() {
+    echo sprintf( '<h2>%s</h2>', esc_html__( 'All Bookmarked Posts', 'jiali-user-bookmarks' ) );
     echo jialiub_render_user_bookmarks_table();
+
+    echo '<hr>';
+
+    echo sprintf( '<h2>%s</h2>', esc_html__( 'All Bookmarked Posts', 'jiali-user-bookmarks' ) );
+    echo jialiub_render_all_bookmarks_table();
 }
 
 ?>

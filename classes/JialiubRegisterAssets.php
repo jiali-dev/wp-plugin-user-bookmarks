@@ -51,6 +51,14 @@ class JialiubRegisterAssets {
         wp_register_style('jialiub-styles', JIALIUB_ASSETS_URI . '/css/styles.css' , array(), '1.0.0', 'all');
         // Register scripts
         wp_register_script('jialiub-script', JIALIUB_ASSETS_URI . '/js/main.js', array('jquery'), '1.0.0', true);
+
+        // Localize script
+        wp_localize_script( 'jialiub-script', 'jialiub_ajax', 
+            array(
+                'ajaxurl' => admin_url('admin-ajax.php'),
+                'nonce' => wp_create_nonce('jialiub-nonce')
+            )
+        );
         
     }
     
