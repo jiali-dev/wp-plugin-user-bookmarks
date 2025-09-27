@@ -29,13 +29,21 @@ class JialiubBookmarkFunctions {
     public function getTopBookmarks() {
         global $wpdb;
 
-        $results = $wpdb->get_col(
-            "SELECT post_id 
-            FROM $this->table_name 
-            GROUP BY post_id 
-            ORDER BY COUNT(*) DESC 
-            LIMIT 10"
-        );
+        // Use cache key based on table name
+        $cache_key = 'top_bookmarks';
+        $results = wp_cache_get( $cache_key, 'jialiub_bookmarks' );
+
+        if ( false === $results ) {
+            $results = $wpdb->get_col(
+                "SELECT post_id 
+                FROM $this->table_name
+                GROUP BY post_id 
+                ORDER BY COUNT(*) DESC 
+                LIMIT 10"
+            );
+
+            wp_cache_set( $cache_key, $results, 'jialiub_bookmarks', 10 * MINUTE_IN_SECONDS );
+        }
 
         return $results;
     }
@@ -76,9 +84,22 @@ class JialiubBookmarkFunctions {
      */
     public function getUserBookmarks($user_id) {
         global $wpdb; 
-        $results = $wpdb->get_col(
-            $wpdb->prepare("SELECT post_id FROM $this->table_name WHERE user_id = %d", $user_id)
-        );      
+
+        // Use cache key based on table name
+        $cache_key = 'user_bookmarks';
+        $results = wp_cache_get( $cache_key, 'jialiub_bookmarks' );
+
+        if ( false === $results ) {
+            $results = $wpdb->get_col(
+                $wpdb->prepare(
+                    "SELECT post_id 
+                    FROM $this->table_name 
+                    WHERE user_id = %d", $user_id
+                )
+            );    
+            wp_cache_set( $cache_key, $results, 'jialiub_bookmarks', 10 * MINUTE_IN_SECONDS );
+        }
+            
         return $results;
     }
 
@@ -90,7 +111,14 @@ class JialiubBookmarkFunctions {
     */
     public function bookmarkExists($user_id, $post_id) {
         global $wpdb;
-        $exists = $wpdb->get_var($wpdb->prepare("SELECT COUNT(*) FROM $this->table_name WHERE user_id = %d AND post_id = %d", $user_id, $post_id));
+        $exists = $wpdb->get_var(
+            $wpdb->prepare(
+                "SELECT COUNT(*) 
+                FROM $this->table_name 
+                WHERE user_id = %d AND post_id = %d",
+                $user_id, $post_id
+            )
+        );
         return $exists > 0; 
     }
 
@@ -158,6 +186,11 @@ class JialiubBookmarkFunctions {
             }
             
         }
+
+        // Delete cache
+        wp_cache_delete('top_bookmarks', 'jialiub_bookmarks');
+        wp_cache_delete('user_bookmarks', 'jialiub_bookmarks');
+
         return $result;
     }
     
