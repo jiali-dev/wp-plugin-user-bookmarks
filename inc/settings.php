@@ -185,13 +185,6 @@ function jialiub_register_settings() {
             'jialiub_main_settings_section'
         );
 
-        // Style section (optional access control)
-        add_settings_section(
-            'jialiub_style_settings_section',
-            esc_html__('Style Settings', 'jiali-user-bookmarks'),
-            '__return_false',
-            'jialiub-user-bookmarks-style'
-        );
     }
 
 }
@@ -284,7 +277,6 @@ function jialiub_show_label_field() {
     </label>
     <?php
 }
-
 
 /**
  * Bookmark Posts Report Page

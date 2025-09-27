@@ -9,7 +9,6 @@ if (!defined('ABSPATH')) exit;
  * Usage: [jialiub_bookmark_button]
  */
 function jialiub_bookmark_button_shortcode($atts) {
-
     return jialiub_bookmark_button_html();
 }
 add_shortcode('jialiub_bookmark_button', 'jialiub_bookmark_button_shortcode');

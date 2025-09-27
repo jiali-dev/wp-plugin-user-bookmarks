@@ -26,13 +26,44 @@
   color: #e63946; /* Highlight color on hover */
 }
 
+/* Table */
 .table-responsive {
-  width: 100%;
+  width: 95%;
   overflow-x: auto;
   background: #fff;
+  padding: 3rem 1rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  margin: 0 auto; 
 }
 
 .jialiub-bookmarks-table td a {
   color: #1d4ed8;
   text-decoration: none;  
+}
+
+/* Pagination */
+.jialiub-pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 20px;
+  list-style: none;
+  padding: 0;
+}
+
+.jialiub-pagination a {
+  text-decoration: none;
+}
+
+.jialiub-pagination .page-numbers {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 32px;
+  height: 32px;
+  margin: 0 4px;
+  border: 1px solid #ddd;
+  border-radius: 50%;
+  text-align: center;
 }

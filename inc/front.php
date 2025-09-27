@@ -143,15 +143,38 @@ function jialiub_render_user_bookmarks_table( ) {
                         </tr>
                     <?php endwhile; wp_reset_postdata(); ?>
                 </tbody>
+                <tfoot>
+                    <tr>
+                        <th><?php esc_html_e('Title', 'jiali-user-bookmarks'); ?></th>
+                        <th><?php esc_html_e('Author', 'jiali-user-bookmarks'); ?></th>
+                    </tr>
+                </tfoot>
             </table>
 
             <div class="jialiub-pagination">
                 <?php
-                echo paginate_links([
-                    'total'   => $bookmarks->max_num_pages,
-                    'current' => $paged,
-                    'format'  => '?ubm_page=%#%',
-                ]);
+                    if ( is_admin() ) {
+                        // 🔹 Admin side
+                        $base = add_query_arg(
+                            [
+                                'page'     => 'jialiub-bookmarked-posts-report',
+                                'ubm_page' => '%#%',
+                            ],
+                            admin_url( 'admin.php' )
+                        );
+                    } else {
+                        // 🔹 Frontend side
+                        global $wp;
+                        $base = add_query_arg( 'ubm_page', '%#%', home_url( $wp->request ) );
+                    }
+                    echo paginate_links( [
+                        'base'    => $base,
+                        'format'  => '',                  // not needed because we use add_query_arg
+                        'current' => $paged,              // your current page number
+                        'total'   => $bookmarks->max_num_pages, // total pages from WP_Query
+                        'prev_text' => __('«', 'jialiub'), 
+                        'next_text' => __('»', 'jialiub'),     
+                    ] );
                 ?>
             </div>
         </div>
