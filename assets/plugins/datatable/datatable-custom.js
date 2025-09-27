@@ -25,14 +25,14 @@ jQuery(function ($) {
     ordering: false, // optional: enable sorting
   });
 
-  let all_bookmarks = new DataTable(".jialiub-all-bookmarks-table", {
+  let top_bookmarks = new DataTable(".jialiub-top-bookmarks-table", {
     processing: true,
     serverSide: true,
     ajax: {
       url: jialiub_ajax.ajaxurl,
       type: "POST",
       data: function (d) {
-        d.action = "jialiub_get_all_bookmarks_ajax";
+        d.action = "jialiub_get_top_bookmarks_ajax";
         d.nonce = jialiub_ajax.nonce;
       },
     },
@@ -44,7 +44,7 @@ jQuery(function ($) {
       [10, 25, 50, -1],
       [10, 25, 50, "All"],
     ], // dropdown for rows
-    paging: true, // enable pagination
+    paging: false, // enable pagination
     searching: false, // optional: enable search
     ordering: false, // optional: enable sorting
   });

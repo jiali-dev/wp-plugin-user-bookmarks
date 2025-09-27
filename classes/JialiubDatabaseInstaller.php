@@ -18,11 +18,13 @@ class JialiubDatabaseInstaller {
             id mediumint(9) NOT NULL AUTO_INCREMENT,
             user_id mediumint(9) NOT NULL,
             post_id mediumint(9) NOT NULL,
-            date_added DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+            date_added DATETIME NOT NULL,
+            date_added_gmt DATETIME NOT NULL,
             PRIMARY KEY  (id),
             KEY user_id (user_id),
             KEY post_id (post_id),
-            KEY date_added (date_added)
+            KEY date_added (date_added),
+            KEY date_added_gmt (date_added_gmt)
         ) $charset_collate;";
 
 

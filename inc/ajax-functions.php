@@ -9,8 +9,9 @@ function jialiub_bookmark_toggle_ajax( ) {
     try {
 
         // Check nonce
-        if ( empty($_POST['nonce']) || !isset($_POST['nonce']) || !wp_verify_nonce( $_POST['nonce'], 'jialiub-nonce' ) )
-            throw new Exception( __( 'Security error!', 'jiali-user-bookmarks' ) , 403 );
+        $nonce = isset($_POST['nonce']) ? sanitize_text_field( wp_unslash($_POST['nonce']) ) : '';
+        if ( empty($nonce) || !wp_verify_nonce($nonce, 'jialiub-nonce') )
+            throw new Exception( __( 'Security error!', 'jiali-user-bookmarks' ), 403 );
 
         // Check user login
         if ( !is_user_logged_in(  ) )
@@ -66,8 +67,9 @@ function jialiub_get_user_bookmarks_ajax() {
     try {
 
         // Check nonce
-        if ( empty($_POST['nonce']) || !isset($_POST['nonce']) || !wp_verify_nonce( $_POST['nonce'], 'jialiub-nonce' ) )
-            throw new Exception( __( 'Security error!', 'jiali-user-bookmarks' ) , 403 );
+        $nonce = isset($_POST['nonce']) ? sanitize_text_field( wp_unslash($_POST['nonce']) ) : '';
+        if ( empty($nonce) || !wp_verify_nonce($nonce, 'jialiub-nonce') )
+            throw new Exception( __( 'Security error!', 'jiali-user-bookmarks' ), 403 );
 
         $paged = isset($_POST['start']) ? floor(intval($_POST['start']) / intval($_POST['length'])) + 1 : 1;
         $per_page = intval($_POST['length']) ?: 10;
@@ -124,18 +126,19 @@ add_action('wp_ajax_jialiub_get_user_bookmarks_ajax', 'jialiub_get_user_bookmark
 add_action('wp_ajax_nopriv_jialiub_get_user_bookmarks_ajax', 'jialiub_get_user_bookmarks_ajax');
 
 // Get All Bookmarks
-function jialiub_get_all_bookmarks_ajax() {
+function jialiub_get_top_bookmarks_ajax() {
     try {
 
         // Check nonce
-        if ( empty($_POST['nonce']) || !isset($_POST['nonce']) || !wp_verify_nonce( $_POST['nonce'], 'jialiub-nonce' ) )
-            throw new Exception( __( 'Security error!', 'jiali-user-bookmarks' ) , 403 );
+        $nonce = isset($_POST['nonce']) ? sanitize_text_field( wp_unslash($_POST['nonce']) ) : '';
+        if ( empty($nonce) || !wp_verify_nonce($nonce, 'jialiub-nonce') )
+            throw new Exception( __( 'Security error!', 'jiali-user-bookmarks' ), 403 );
 
         $paged = isset($_POST['start']) ? floor(intval($_POST['start']) / intval($_POST['length'])) + 1 : 1;
         $per_page = intval($_POST['length']) ?: 10;
 
         $user_id = get_current_user_id();
-        $bookmarked_ids = JialiubBookmarkFunctions::getInstance()->getAllBookmarks();
+        $bookmarked_ids = JialiubBookmarkFunctions::getInstance()->getTopBookmarks();
 
         if(empty($bookmarked_ids)) {
             wp_send_json([
@@ -183,5 +186,5 @@ function jialiub_get_all_bookmarks_ajax() {
         ], $ex->getCode() ? $ex->getCode() : 403);
     }  
 }
-add_action('wp_ajax_jialiub_get_all_bookmarks_ajax', 'jialiub_get_all_bookmarks_ajax');
-add_action('wp_ajax_nopriv_jialiub_get_all_bookmarks_ajax', 'jialiub_get_all_bookmarks_ajax');
+add_action('wp_ajax_jialiub_get_top_bookmarks_ajax', 'jialiub_get_top_bookmarks_ajax');
+add_action('wp_ajax_nopriv_jialiub_get_top_bookmarks_ajax', 'jialiub_get_top_bookmarks_ajax');

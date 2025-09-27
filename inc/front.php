@@ -43,13 +43,13 @@ function jialiub_bookmark_button_html() {
                         <i class="jialiub-icon <?php echo ( $bookmarks_exist ? 'fa-solid' : 'fa-regular' ) ?> fa-bookmark"></i>
                         <?php if( !empty(get_option('jialiub_show_label') ) ):  ?>
                             <span class="jialiub-bookmark-label">
-                                <?php echo ( $bookmarks_exist ? JIALIUB_ACTION_LABEL : JIALIUB_SINGULAR_LABEL ); ?>
+                                <?php echo esc_html( $bookmarks_exist ? JIALIUB_ACTION_LABEL : JIALIUB_SINGULAR_LABEL ); ?>
                             </span>
                         <?php endif ?>
                         <span class="jialiub-bookmark-count">
                             <?php 
                                 $bookmarks_count = JialiubBookmarkFunctions::getInstance()->getPostBookmarksCount($post->ID);
-                                echo ( $bookmarks_count > 0 ? "($bookmarks_count)" : '' ); 
+                                echo esc_html( $bookmarks_count > 0 ? "($bookmarks_count)" : '' ); 
                             ?>
                         </span>
                     </span>
@@ -133,7 +133,7 @@ function jialiub_render_user_bookmarks_table( ) {
  *
  * @return string
  */
-function jialiub_render_all_bookmarks_table( ) {
+function jialiub_render_top_bookmarks_table( ) {
 
     wp_enqueue_script('jialiub-script');
 
@@ -151,7 +151,7 @@ function jialiub_render_all_bookmarks_table( ) {
 
     
     <div class="table-responsive">
-        <table class="jialiub-bookmarks-table jialiub-all-bookmarks-table table table-striped table-row-bordered display" role="grid">
+        <table class="jialiub-bookmarks-table jialiub-top-bookmarks-table table table-striped table-row-bordered display" role="grid">
             <thead>
                 <tr>
                     <th><?php esc_html_e('Title', 'jiali-user-bookmarks'); ?></th>

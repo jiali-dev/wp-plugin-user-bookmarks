@@ -23,8 +23,12 @@ function jialiub_add_admin_menu() {
     
     // Show main menu only to users who can manage options (e.g., admins)
     if (current_user_can('manage_options')) {
+        
+        // Main menu
         add_menu_page(
-            sprintf( esc_html__('User %s', 'jiali-user-bookmarks'), JIALIUB_PLURAL_LABEL ),
+            /* translators: %s: Plural label for bookmarks */
+            sprintf( esc_html__('User %s', 'jiali-user-bookmarks'), JIALIUB_PLURAL_LABEL ),  
+            /* translators: %s: Plural label for bookmarks */
             sprintf( esc_html__('%s', 'jiali-user-bookmarks'), JIALIUB_PLURAL_LABEL ),
             'manage_options',
             'jialiub-user-bookmarks',
@@ -48,7 +52,9 @@ function jialiub_add_admin_menu() {
     // Bookmarks Posts Report
     add_submenu_page(
         'jialiub-user-bookmarks',
+        /* translators: %s: Plural label for bookmarks */
         sprintf( esc_html__('%s Report', 'jiali-user-bookmarks'), JIALIUB_PLURAL_LABEL ),
+        /* translators: %s: Plural label for bookmarks */
         sprintf( esc_html__('%s Report', 'jiali-user-bookmarks'), JIALIUB_PLURAL_LABEL ),
         'manage_options',
         'jialiub-bookmarked-posts-report',
@@ -65,7 +71,12 @@ add_action('admin_menu', 'jialiub_add_admin_menu');
 function jialiub_settings_page() {
     ?>
     <div class="wrap">
-        <h1><?php echo sprintf( esc_html__('User %s Settings', 'jiali-user-bookmarks'), JIALIUB_PLURAL_LABEL ); ?></h1>
+        <h1>
+            <?php 
+                /* translators: %s: Plural label for bookmarks */
+                echo sprintf( esc_html__('User %s Settings', 'jiali-user-bookmarks'), esc_html(JIALIUB_PLURAL_LABEL) );
+            ?>
+        </h1>
         <form method="post" action="options.php">
             <?php
             settings_fields('jialiub_settings_group');
@@ -109,6 +120,7 @@ function jialiub_register_settings() {
 
         add_settings_field(
             'jialiub_bookmark_enabled_post_types',
+            /* translators: %s: Plural label for bookmarks */
             sprintf( esc_html__('Enabled Post Types for %s', 'jiali-user-bookmarks'), JIALIUB_PLURAL_LABEL ),
             'jialiub_bookmark_post_types_field',
             'jialiub-user-bookmarks',
@@ -125,6 +137,7 @@ function jialiub_register_settings() {
 
         register_setting('jialiub_settings_group', 'jialiub_singular_label', [
             'type' => 'string',
+            /* translators: %s: Singular label for bookmarks */
             'default' => sprintf( esc_html__('%s', 'jiali-user-bookmarks'), JIALIUB_SINGULAR_LABEL ),
             'sanitize_callback' => 'sanitize_text_field',
             'capability' => 'manage_options',
@@ -140,6 +153,7 @@ function jialiub_register_settings() {
 
         register_setting('jialiub_settings_group', 'jialiub_plural_label', [
             'type' => 'string',
+            /* translators: %s: Plural label for bookmarks */
             'default' => sprintf( esc_html__('%s', 'jiali-user-bookmarks'), JIALIUB_PLURAL_LABEL ),
             'sanitize_callback' => 'sanitize_text_field',
             'capability' => 'manage_options',
@@ -155,6 +169,7 @@ function jialiub_register_settings() {
 
         register_setting('jialiub_settings_group', 'jialiub_action_label', [
             'type' => 'string',
+            /* translators: %s: Action label for bookmarks */
             'default' => sprintf( esc_html__('%s', 'jiali-user-bookmarks'), JIALIUB_ACTION_LABEL ),
             'sanitize_callback' => 'sanitize_text_field',
             'capability' => 'manage_options',
@@ -282,13 +297,31 @@ function jialiub_show_label_field() {
  * Bookmark Posts Report Page
  */
 function jialiub_bookmarked_posts_report_page() {
-    echo sprintf( '<h2>%s</h2>', esc_html__( 'All Bookmarked Posts', 'jiali-user-bookmarks' ) );
-    echo jialiub_render_user_bookmarks_table();
+    echo wp_kses_post(
+        sprintf(
+            '<h2>%s</h2>',
+            sprintf(
+                /* translators: %s is the action label */
+                esc_html__('Your %s Posts', 'jiali-user-bookmarks'),
+                esc_html(JIALIUB_ACTION_LABEL)
+            )
+        )
+    );
+    echo wp_kses_post( jialiub_render_user_bookmarks_table() );
 
     echo '<hr>';
 
-    echo sprintf( '<h2>%s</h2>', esc_html__( 'All Bookmarked Posts', 'jiali-user-bookmarks' ) );
-    echo jialiub_render_all_bookmarks_table();
+    echo wp_kses_post(
+    sprintf(
+            '<h2>%s</h2>',
+            sprintf(
+                /* translators: %s is the action label */
+                esc_html__('Top %s Posts', 'jiali-user-bookmarks'),
+                esc_html(JIALIUB_ACTION_LABEL)
+            )
+        )
+    );
+    echo wp_kses_post( jialiub_render_top_bookmarks_table() );
 }
 
 ?>

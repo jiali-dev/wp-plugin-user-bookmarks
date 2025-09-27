@@ -49,7 +49,6 @@ class JialiubCore {
 
     private function init() {
         // Hook into WordPress
-        add_action('plugins_loaded', [$this, 'loadTextdomain']);
         add_action('init', [$this, 'startOutputBuffers']);
    
         add_action('wp_enqueue_scripts', [$this, 'registerAssets']);
@@ -62,11 +61,6 @@ class JialiubCore {
         include_once(JIALIUB_PLUGIN_PATH.'inc/shortcodes.php');
         include_once(JIALIUB_PLUGIN_PATH.'inc/ajax-functions.php');
         
-    }
-
-    // Load Textdomain for translations
-    public static function loadTextdomain() {
-        load_plugin_textdomain('jiali-user-bookmarks', false, 'languages');
     }
 
     // Start output buffering
