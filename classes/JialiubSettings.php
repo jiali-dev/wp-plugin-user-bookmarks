@@ -7,7 +7,7 @@ class JialiubSettings {
     private static $instance = null;
 
     public function __construct() {
-        add_filter('plugin_action_links_' . plugin_basename(__FILE__), [$this, 'addPluginSettingsLink']);
+        add_filter('plugin_action_links_' . plugin_basename(dirname(__DIR__) . '/core.php'), [$this, 'addPluginSettingsLink']);
         add_action('admin_menu', [$this, 'registerBookmarkMenu']);
         add_action('admin_init', [$this, 'registerSettings']);
         add_action('wp_enqueue_scripts', [$this, 'enqueueStyles']);
@@ -28,7 +28,7 @@ class JialiubSettings {
      */
     public function addPluginSettingsLink($links) {
         if (!current_user_can('manage_options')) return $links;
-        $url = esc_url(admin_url('admin.php?page=jialiub-user-bookmarks'));
+        $url = esc_url(admin_url('admin.php?page=jialiub_settings'));
         $text = esc_html__('Settings', 'jiali-user-bookmarks');
         $settingsLink = '<a href="' . $url . '">' . $text . '</a>';
         array_unshift($links, $settingsLink);
