@@ -42,23 +42,8 @@ class JialiubRegisterAssets {
 
     public static function adminRegisterAssets() {
 
-        // Register datatable
-        wp_register_style('jialiub-datatable', JIALIUB_ASSETS_URI . '/plugins/datatable/datatable.min.css' , array(), '2.3.4', 'all');
-        wp_register_script('jialiub-datatable', JIALIUB_ASSETS_URI . '/plugins/datatable/datatable.min.js' , array(), '2.3.4', true);
-        wp_register_script('jialiub-datatable-custom', JIALIUB_ASSETS_URI . '/plugins/datatable/datatable-custom.js' , array(), '2.3.4', true);
-        
-        // Register styles
-        wp_register_style('jialiub-styles', JIALIUB_ASSETS_URI . '/css/styles.css' , array(), '1.0.0', 'all');
-        // Register scripts
-        wp_register_script('jialiub-script', JIALIUB_ASSETS_URI . '/js/main.js', array('jquery'), '1.0.0', true);
-
-        // Localize script
-        wp_localize_script( 'jialiub-script', 'jialiub_ajax', 
-            array(
-                'ajaxurl' => admin_url('admin-ajax.php'),
-                'nonce' => wp_create_nonce('jialiub-nonce')
-            )
-        );
+        // It is neede for this project
+        self::registerAssets();
         
     }
     

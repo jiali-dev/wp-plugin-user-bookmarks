@@ -96,13 +96,17 @@ add_filter('the_content', 'jialiub_append_buttons_to_content');
  */
 function jialiub_render_user_bookmarks_table( ) {
 
+    wp_enqueue_style('jialiub-fontawesome');
+    wp_enqueue_script('jialiub-fontawesome');
+    wp_enqueue_style('jialiub-notiflix');
+    wp_enqueue_script('jialiub-notiflix');
+    wp_enqueue_script('jialiub-notiflix-custom');
+    wp_enqueue_style('jialiub-styles');
     wp_enqueue_script('jialiub-script');
-
+    wp_enqueue_script('jialiub-script');
     wp_enqueue_style('jialiub-datatable');
     wp_enqueue_script('jialiub-datatable');
     wp_enqueue_script('jialiub-datatable-custom');
-
-    wp_enqueue_style('jialiub-styles');
 
     ob_start();
     ?>
@@ -113,12 +117,14 @@ function jialiub_render_user_bookmarks_table( ) {
                 <tr>
                     <th><?php esc_html_e('Title', 'jiali-user-bookmarks'); ?></th>
                     <th><?php esc_html_e('Author', 'jiali-user-bookmarks'); ?></th>
+                    <th><?php esc_html_e('Action', 'jiali-user-bookmarks'); ?></th>
                 </tr>
             </thead>
             <tfoot>
                 <tr>
                     <th><?php esc_html_e('Title', 'jiali-user-bookmarks'); ?></th>
                     <th><?php esc_html_e('Author', 'jiali-user-bookmarks'); ?></th>
+                    <th><?php esc_html_e('Action', 'jiali-user-bookmarks'); ?></th>
                 </tr>
             </tfoot>
         </table>

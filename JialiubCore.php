@@ -52,7 +52,7 @@ class JialiubCore {
         add_action('init', [$this, 'startOutputBuffers']);
    
         add_action('wp_enqueue_scripts', [$this, 'registerAssets']);
-        add_action('admin_enqueue_scripts', [$this, 'adminRegisterAssets']);
+        add_action('admin_enqueue_scripts', [$this, 'adminRegisterAssets']); // For this project
 
         include_once( ABSPATH.'wp-includes/pluggable.php'); // For getting wp_get_current_user and etc. 
         // include_once(JIALIUB_PLUGIN_PATH.'inc/functions.php');

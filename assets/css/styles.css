@@ -1,11 +1,44 @@
+/* General Style */
+.jialiub-container {
+  display: grid;
+  grid-template-columns: 1fr;
+  column-gap: 75px;
+  row-gap: 60px;
+  align-items: start;
+  padding: 16px;
+}
+
+.jialiub-container--bg-white {
+  background: #fff;
+}
+
+.p-4 {
+  padding: 40px;
+}
+
+h1.jialiub-heading {
+  font-size: 26px;
+}
+
+h2.jialiub-heading {
+  font-size: 24px;
+}
+
+h3.jialiub-heading {
+  font-size: 22px;
+}
+
+h4.jialiub-heading {
+  font-size: 20px;
+}
+
+/* Bookmarks Style */
 .jialiub-bookmark {
   display: inline-flex;
   flex-wrap: wrap;
   gap: 12px;
   align-items: center;
   justify-content: flex-start;
-  margin-top: 1rem;
-  margin-bottom: 1rem;
   font-size: inherit;
   color: inherit;
 }
@@ -34,12 +67,15 @@
   padding: 3rem 1rem;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   border-radius: 8px;
-  margin: 0 auto; 
+  margin: 0 auto;
 }
 
+.jialiub-bookmarks-table td {
+  text-align: start;
+}
 .jialiub-bookmarks-table td a {
   color: #1d4ed8;
-  text-decoration: none;  
+  text-decoration: none;
 }
 
 /* Pagination */
