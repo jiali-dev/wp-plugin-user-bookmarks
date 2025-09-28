@@ -58,9 +58,9 @@ class JialiubCore {
         // include_once(JIALIUB_PLUGIN_PATH.'inc/functions.php');
         include_once(JIALIUB_PLUGIN_PATH.'inc/front.php');
         include_once(JIALIUB_PLUGIN_PATH.'inc/shortcodes.php');
-        include_once(JIALIUB_PLUGIN_PATH.'inc/ajax-functions.php');
 
         JialiubSettings::getInstance();
+        JialiubAjaxFunctions::getInstance();
         
     }
 
