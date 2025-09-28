@@ -12,7 +12,7 @@ jQuery(function ($) {
         d.nonce = jialiub_ajax.nonce;
       },
     },
-    columns: [{ title: "Title" }, { title: "Author" }],
+    columns: [{ title: "Title" }, { title: "Author" }, { title: "Action" }],
     pageLength: 10,
     lengthChange: false,
     responsive: true,

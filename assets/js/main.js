@@ -1,7 +1,10 @@
 jQuery(function ($) {
   "use strict";
 
-  $(".jialiub-bookmark-button").on("click", function () {
+  $(document).on("click", ".jialiub-bookmark-button", function (e) {
+
+    e.preventDefault();
+
     // Get current element
     let el = $(this);
 

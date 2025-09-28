@@ -10,7 +10,7 @@ if (!defined('ABSPATH')) exit;
  * @param array $enabled_for_bookmark
  * @return string
  */
-function jialiub_bookmark_button_html() {
+function jialiub_bookmark_button_html( $post, $just_icon = false ) {
 
     wp_enqueue_style('jialiub-fontawesome');
     wp_enqueue_script('jialiub-fontawesome');
@@ -19,8 +19,6 @@ function jialiub_bookmark_button_html() {
     wp_enqueue_script('jialiub-notiflix-custom');
     wp_enqueue_style('jialiub-styles');
     wp_enqueue_script('jialiub-script');
-
-    global $post;
 
     if (!isset($post)) return '';
 
@@ -41,17 +39,19 @@ function jialiub_bookmark_button_html() {
                     $bookmarks_exist = JialiubBookmarkFunctions::getInstance()->bookmarkExists(get_current_user_id(  ), $post->ID ) ?>
                     <span class="jialiub-bookmark-button <?php echo ( $bookmarks_exist ? 'jialiub-bookmark-button-active' : '' ) ?>" data-action="bookmark">
                         <i class="jialiub-icon <?php echo ( $bookmarks_exist ? 'fa-solid' : 'fa-regular' ) ?> fa-bookmark"></i>
-                        <?php if( !empty(get_option('jialiub_show_label') ) ):  ?>
-                            <span class="jialiub-bookmark-label">
-                                <?php echo esc_html( $bookmarks_exist ? JIALIUB_ACTION_LABEL : JIALIUB_SINGULAR_LABEL ); ?>
+                        <?php if( !$just_icon ): ?>
+                            <?php if( !empty(get_option('jialiub_show_label') ) ):  ?>
+                                <span class="jialiub-bookmark-label">
+                                    <?php echo esc_html( $bookmarks_exist ? JIALIUB_ACTION_LABEL : JIALIUB_SINGULAR_LABEL ); ?>
+                                </span>
+                            <?php endif ?>
+                            <span class="jialiub-bookmark-count">
+                                <?php 
+                                    $bookmarks_count = JialiubBookmarkFunctions::getInstance()->getPostBookmarksCount($post->ID);
+                                    echo esc_html( $bookmarks_count > 0 ? "($bookmarks_count)" : '' ); 
+                                ?>
                             </span>
-                        <?php endif ?>
-                        <span class="jialiub-bookmark-count">
-                            <?php 
-                                $bookmarks_count = JialiubBookmarkFunctions::getInstance()->getPostBookmarksCount($post->ID);
-                                echo esc_html( $bookmarks_count > 0 ? "($bookmarks_count)" : '' ); 
-                            ?>
-                        </span>
+                        <?php endif; ?>
                     </span>
                 <?php endif; ?>
             </div>
@@ -77,7 +77,7 @@ function jialiub_append_buttons_to_content($content) {
         return $content;
     }
 
-    $buttons_html = jialiub_bookmark_button_html();
+    $buttons_html = jialiub_bookmark_button_html($post);
 
     $position = get_option('jialiub_button_position', 'after');
 

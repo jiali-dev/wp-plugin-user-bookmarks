@@ -22,20 +22,20 @@ add_filter('plugin_action_links_' . plugin_basename(__FILE__), 'jialiub_add_plug
 function jialiub_add_admin_menu() {
     
     // Show main menu only to users who can manage options (e.g., admins)
+    // Main menu
+    add_menu_page(
+        /* translators: %s: Plural label for bookmarks */
+        sprintf( esc_html__('User %s', 'jiali-user-bookmarks'), JIALIUB_PLURAL_LABEL ),  
+        /* translators: %s: Plural label for bookmarks */
+        sprintf( esc_html__('%s', 'jiali-user-bookmarks'), JIALIUB_PLURAL_LABEL ),
+        'manage_options',
+        'jialiub-user-bookmarks',
+        'jialiub_settings_page',
+        'dashicons-plus',
+        65
+    );
+
     if (current_user_can('manage_options')) {
-        
-        // Main menu
-        add_menu_page(
-            /* translators: %s: Plural label for bookmarks */
-            sprintf( esc_html__('User %s', 'jiali-user-bookmarks'), JIALIUB_PLURAL_LABEL ),  
-            /* translators: %s: Plural label for bookmarks */
-            sprintf( esc_html__('%s', 'jiali-user-bookmarks'), JIALIUB_PLURAL_LABEL ),
-            'manage_options',
-            'jialiub-user-bookmarks',
-            'jialiub_settings_page',
-            'dashicons-plus',
-            65
-        );
 
         // Settings submenu (same as main page)
         add_submenu_page(
