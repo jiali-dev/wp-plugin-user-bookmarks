@@ -9,9 +9,27 @@ if (!defined('ABSPATH')) exit;
  * Usage: [jialiub_bookmark_button]
  */
 function jialiub_bookmark_button_shortcode($atts) {
-    
-    jialiub_enqueue_assets();
-
-    return jialiub_get_bookmark_button_html();
+    global $post;
+    return jialiub_bookmark_button_html($post);
 }
 add_shortcode('jialiub_bookmark_button', 'jialiub_bookmark_button_shortcode');
+
+/**
+ * Shortcode handler for displaying user's bookmarks table
+ *
+ * Usage: [jialiub_user_bookmarks_table]
+ */
+function jialiub_user_bookmarks_table_shortcode($atts) { 
+    return jialiub_render_user_bookmarks_table();
+}
+add_shortcode('jialiub_user_bookmarks_table', 'jialiub_user_bookmarks_table_shortcode');
+
+/**
+ * Shortcode handler for displaying top bookmarks table
+ *
+ * Usage: [jialiub_top_bookmarks_table]
+ */
+function jialiub_top_bookmarks_table_shortcode($atts) { 
+    return jialiub_render_top_bookmarks_table();
+}
+add_shortcode('jialiub_top_bookmarks_table', 'jialiub_top_bookmarks_table_shortcode');

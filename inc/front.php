@@ -4,9 +4,14 @@
 if (!defined('ABSPATH')) exit;
 
 /**
- * Enqueue necessary scripts and styles once
+ * Generate the bookmark buttons based on settings
+ *
+ * @param string $post_type
+ * @param array $enabled_for_bookmark
+ * @return string
  */
-function jialiub_enqueue_assets() {
+function jialiub_bookmark_button_html( $post, $just_icon = false ) {
+
     wp_enqueue_style('jialiub-fontawesome');
     wp_enqueue_script('jialiub-fontawesome');
     wp_enqueue_style('jialiub-notiflix');
@@ -14,17 +19,6 @@ function jialiub_enqueue_assets() {
     wp_enqueue_script('jialiub-notiflix-custom');
     wp_enqueue_style('jialiub-styles');
     wp_enqueue_script('jialiub-script');
-}
-
-/**
- * Generate the bookmark buttons based on settings
- *
- * @param string $post_type
- * @param array $enabled_for_bookmark
- * @return string
- */
-function jialiub_get_bookmark_button_html() {
-    global $post;
 
     if (!isset($post)) return '';
 
@@ -39,15 +33,29 @@ function jialiub_get_bookmark_button_html() {
 
     ob_start();
     ?>
-    <div class="jialiub-bookmark" data-post-id="<?php echo esc_attr($post->ID); ?>">
-        <?php if( is_array($enabled_for_bookmark) && in_array($post->post_type, $enabled_for_bookmark)) : 
-            $bookmarks_exist = jialiub_bookmark_exist(get_current_user_id(  ), $post->ID ) ?>
-            <span class="jialiub-bookmark-button <?php echo ( $bookmarks_exist ? 'jialiub-bookmark-button-active' : '' ) ?>" data-action="bookmark">
-                <i class="jialiub-icon <?php echo ( $bookmarks_exist ? 'fa-solid' : 'fa-regular' ) ?> fa-bookmark"></i>
-                <span class="jialiub-bookmark-count"><?php $bookmarks_count = jialiub_get_post_bookmarks_count($post->ID); echo ( $bookmarks_count > 0 ? $bookmarks_count : '' ); ?></span>
-            </span>
-        <?php endif; ?>
-    </div>
+        <div class="jialiub-bookmark" data-post-id="<?php echo esc_attr($post->ID); ?>">
+            <div class="jialiub-bookmark-block" >
+                <?php if( is_array($enabled_for_bookmark) && in_array($post->post_type, $enabled_for_bookmark)) : 
+                    $bookmarks_exist = JialiubBookmarkFunctions::getInstance()->bookmarkExists(get_current_user_id(  ), $post->ID ) ?>
+                    <span class="jialiub-bookmark-button <?php echo ( $bookmarks_exist ? 'jialiub-bookmark-button-active' : '' ) ?>" data-action="bookmark">
+                        <i class="jialiub-icon <?php echo ( $bookmarks_exist ? 'fa-solid' : 'fa-regular' ) ?> fa-bookmark"></i>
+                        <?php if( !$just_icon ): ?>
+                            <?php if( !empty(get_option('jialiub_show_label') ) ):  ?>
+                                <span class="jialiub-bookmark-label">
+                                    <?php echo esc_html( $bookmarks_exist ? JIALIUB_ACTION_LABEL : JIALIUB_SINGULAR_LABEL ); ?>
+                                </span>
+                            <?php endif ?>
+                            <span class="jialiub-bookmark-count">
+                                <?php 
+                                    $bookmarks_count = JialiubBookmarkFunctions::getInstance()->getPostBookmarksCount($post->ID);
+                                    echo esc_html( $bookmarks_count > 0 ? "($bookmarks_count)" : '' ); 
+                                ?>
+                            </span>
+                        <?php endif; ?>
+                    </span>
+                <?php endif; ?>
+            </div>
+        </div>
     <?php
     return ob_get_clean();
 }
@@ -69,9 +77,7 @@ function jialiub_append_buttons_to_content($content) {
         return $content;
     }
 
-    jialiub_enqueue_assets();
-
-    $buttons_html = jialiub_get_bookmark_button_html();
+    $buttons_html = jialiub_bookmark_button_html($post);
 
     $position = get_option('jialiub_button_position', 'after');
 
@@ -82,3 +88,93 @@ function jialiub_append_buttons_to_content($content) {
     }
 }
 add_filter('the_content', 'jialiub_append_buttons_to_content');
+
+/**
+ * Render the user's bookmarks
+ *
+ * @return string
+ */
+function jialiub_render_user_bookmarks_table( ) {
+
+    wp_enqueue_style('jialiub-fontawesome');
+    wp_enqueue_script('jialiub-fontawesome');
+    wp_enqueue_style('jialiub-notiflix');
+    wp_enqueue_script('jialiub-notiflix');
+    wp_enqueue_script('jialiub-notiflix-custom');
+    wp_enqueue_style('jialiub-styles');
+    wp_enqueue_script('jialiub-script');
+    wp_enqueue_script('jialiub-script');
+    wp_enqueue_style('jialiub-datatable');
+    wp_enqueue_script('jialiub-datatable');
+    wp_enqueue_script('jialiub-datatable-custom');
+
+    ob_start();
+    ?>
+
+    <div class="table-responsive">
+        <table class="jialiub-bookmarks-table jialiub-user-bookmarks-table table table-striped table-row-bordered display" role="grid">
+            <thead>
+                <tr>
+                    <th><?php esc_html_e('Title', 'jiali-user-bookmarks'); ?></th>
+                    <th><?php esc_html_e('Author', 'jiali-user-bookmarks'); ?></th>
+                    <th><?php esc_html_e('Action', 'jiali-user-bookmarks'); ?></th>
+                </tr>
+            </thead>
+            <tfoot>
+                <tr>
+                    <th><?php esc_html_e('Title', 'jiali-user-bookmarks'); ?></th>
+                    <th><?php esc_html_e('Author', 'jiali-user-bookmarks'); ?></th>
+                    <th><?php esc_html_e('Action', 'jiali-user-bookmarks'); ?></th>
+                </tr>
+            </tfoot>
+        </table>
+
+    </div>
+    <?php
+    return ob_get_clean();
+}
+
+/**
+ * Render the All bookmarks
+ *
+ * @return string
+ */
+function jialiub_render_top_bookmarks_table( ) {
+
+    wp_enqueue_script('jialiub-script');
+
+    wp_enqueue_style('jialiub-datatable');
+    wp_enqueue_script('jialiub-datatable');
+    wp_enqueue_script('jialiub-datatable-custom');
+    
+    wp_enqueue_style('jialiub-styles');
+
+    if( !current_user_can('manage_options') )
+        return;
+   
+    ob_start();
+    ?>
+
+    
+    <div class="table-responsive">
+        <table class="jialiub-bookmarks-table jialiub-top-bookmarks-table table table-striped table-row-bordered display" role="grid">
+            <thead>
+                <tr>
+                    <th><?php esc_html_e('Title', 'jiali-user-bookmarks'); ?></th>
+                    <th><?php esc_html_e('Author', 'jiali-user-bookmarks'); ?></th>
+                    <th><?php esc_html_e('Count', 'jiali-user-bookmarks'); ?></th>
+                </tr>
+            </thead>
+            <tfoot>
+                <tr>
+                    <th><?php esc_html_e('Title', 'jiali-user-bookmarks'); ?></th>
+                    <th><?php esc_html_e('Author', 'jiali-user-bookmarks'); ?></th>
+                    <th><?php esc_html_e('Count', 'jiali-user-bookmarks'); ?></th>
+                </tr>
+            </tfoot>
+        </table>
+
+    </div>
+    <?php
+    return ob_get_clean();
+}

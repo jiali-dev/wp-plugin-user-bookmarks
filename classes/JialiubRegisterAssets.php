@@ -8,6 +8,10 @@ class JialiubRegisterAssets {
     // Registering all assets
     public static function registerAssets() {
 
+        // Register datatable
+        wp_register_style('jialiub-datatable', JIALIUB_ASSETS_URI . '/plugins/datatable/datatable.min.css' , array(), '6.7.2', 'all');
+        wp_register_script('jialiub-datatable', JIALIUB_ASSETS_URI . '/plugins/datatable/datatable.min.js' , array(), '6.7.2', true);
+        
         // Register Fontawesome
         wp_register_style('jialiub-fontawesome', JIALIUB_ASSETS_URI . '/plugins/fontawesome/all.min.css' , array(), '6.7.2', 'all');
         wp_register_script('jialiub-fontawesome', JIALIUB_ASSETS_URI . '/plugins/fontawesome/all.min.js' , array(), '6.7.2', true);
@@ -17,10 +21,15 @@ class JialiubRegisterAssets {
         wp_register_script('jialiub-notiflix', JIALIUB_ASSETS_URI . '/plugins/notiflix/notiflix.min.js' , array(), '3.2.8', true);
         wp_register_script('jialiub-notiflix-custom', JIALIUB_ASSETS_URI . '/plugins/notiflix/notiflix-custom.js' , array(), '3.2.8', true);
 
+        // Register datatable
+        wp_register_style('jialiub-datatable', JIALIUB_ASSETS_URI . '/plugins/datatable/datatable.min.css' , array(), '2.3.4', 'all');
+        wp_register_script('jialiub-datatable', JIALIUB_ASSETS_URI . '/plugins/datatable/datatable.min.js' , array(), '2.3.4', true);
+        wp_register_script('jialiub-datatable-custom', JIALIUB_ASSETS_URI . '/plugins/datatable/datatable-custom.js' , array(), '2.3.4', true);
+        
         // Register styles
-        wp_register_style('jialiub-styles', JIALIUB_CSS_URI . '/styles.css' , array(), '1.0.0', 'all');
+        wp_register_style('jialiub-styles', JIALIUB_ASSETS_URI . '/css/styles.css' , array(), '1.0.0', 'all');
         // Register scripts
-        wp_register_script('jialiub-script', JIALIUB_JS_URI . '/main.js', array('jquery'), '1.0.0', true);
+        wp_register_script('jialiub-script', JIALIUB_ASSETS_URI . '/js/main.js', array('jquery'), '1.0.0', true);
 
         // Localize script
         wp_localize_script( 'jialiub-script', 'jialiub_ajax', 
@@ -30,6 +39,13 @@ class JialiubRegisterAssets {
             )
         );
     } 
+
+    public static function adminRegisterAssets() {
+        wp_enqueue_style('wp-color-picker');
+        wp_enqueue_script('jialiub-color-picker', esc_url(JIALIUB_ASSETS_URI . '/js/admin-color-picker.js'), ['wp-color-picker'], '1.0.0', true);
+        // It is neede for this project
+        self::registerAssets();
+    }
     
 }
 

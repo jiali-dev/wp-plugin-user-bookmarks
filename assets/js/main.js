@@ -1,7 +1,10 @@
 jQuery(function ($) {
   "use strict";
 
-  $(".jialiub-bookmark-button").on("click", function () {
+  $(document).on("click", ".jialiub-bookmark-button", function (e) {
+
+    e.preventDefault();
+
     // Get current element
     let el = $(this);
 
@@ -25,7 +28,11 @@ jQuery(function ($) {
         // Something before send;
       },
       error: function (xhr) {
-        Notiflix.Notify.failure(xhr.responseJSON.message);
+        if( xhr?.responseJSON?.message ) {
+          Notiflix.Notify.failure(xhr?.responseJSON?.message);
+        } else {
+          Notiflix.Notify.failure('An error occurred. Please try again.');
+        }
       },
       success: function (response) {
         if (response.bookmark_exist !== true) {
@@ -40,7 +47,10 @@ jQuery(function ($) {
             .addClass("fa-solid");
         }
         el.find('.jialiub-bookmark-count').html(
-          response.bookmarks_count > 0 ? response.bookmarks_count : ""
+          response.bookmarks_count > 0 ? `(${response.bookmarks_count})` : ""
+        );
+        el?.find('.jialiub-bookmark-label').html(
+         `${response.bookmarks_label}`
         );
       },
       complete: function () {
