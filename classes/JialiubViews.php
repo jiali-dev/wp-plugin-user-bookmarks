@@ -54,28 +54,26 @@ class JialiubViews {
 
         ob_start(); ?>
         <div class="jialiub-bookmark" data-post-id="<?php echo esc_attr( $post->ID ); ?>">
-            <div class="jialiub-bookmark-block">
-                <?php if ( in_array( $post->post_type, $enabled_for_bookmark ) ) : 
-                    $bookmarks_exist = JialiubBookmarkFunctions::getInstance()->bookmarkExists( get_current_user_id(), $post->ID ); ?>
-                    
-                    <span class="jialiub-bookmark-button <?php echo ( $bookmarks_exist ? 'jialiub-bookmark-button-active' : '' ); ?>" data-action="bookmark">
-                        <i class="jialiub-icon <?php echo ( $bookmarks_exist ? 'fa-solid' : 'fa-regular' ); ?> fa-bookmark"></i>
-                        <?php if ( ! $just_icon ): ?>
-                            <?php if ( ! empty( get_option('jialiub_show_label') ) ): ?>
-                                <span class="jialiub-bookmark-label">
-                                    <?php echo esc_html( $bookmarks_exist ? JIALIUB_ACTION_LABEL : JIALIUB_SINGULAR_LABEL ); ?>
-                                </span>
-                            <?php endif; ?>
-                            <span class="jialiub-bookmark-count">
-                                <?php 
-                                    $bookmarks_count = JialiubBookmarkFunctions::getInstance()->getPostBookmarksCount( $post->ID );
-                                    echo esc_html( $bookmarks_count > 0 ? "($bookmarks_count)" : '' ); 
-                                ?>
+            <?php if ( in_array( $post->post_type, $enabled_for_bookmark ) ) : 
+                $bookmarks_exist = JialiubBookmarkFunctions::getInstance()->bookmarkExists( get_current_user_id(), $post->ID ); ?>
+                
+                <span class="jialiub-bookmark-button <?php echo ( $bookmarks_exist ? 'jialiub-bookmark-button-active' : '' ); ?>" data-action="bookmark">
+                    <i class="jialiub-icon <?php echo ( $bookmarks_exist ? 'fa-solid' : 'fa-regular' ); ?> fa-bookmark"></i>
+                    <?php if ( ! $just_icon ): ?>
+                        <?php if ( ! empty( get_option('jialiub_show_label') ) ): ?>
+                            <span class="jialiub-bookmark-label">
+                                <?php echo esc_html( $bookmarks_exist ? JIALIUB_ACTION_LABEL : JIALIUB_SINGULAR_LABEL ); ?>
                             </span>
                         <?php endif; ?>
-                    </span>
-                <?php endif; ?>
-            </div>
+                        <span class="jialiub-bookmark-count">
+                            <?php 
+                                $bookmarks_count = JialiubBookmarkFunctions::getInstance()->getPostBookmarksCount( $post->ID );
+                                echo esc_html( $bookmarks_count > 0 ? "($bookmarks_count)" : '' ); 
+                            ?>
+                        </span>
+                    <?php endif; ?>
+                </span>
+            <?php endif; ?>
         </div>
         <?php
         return ob_get_clean();

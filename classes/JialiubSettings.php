@@ -78,7 +78,7 @@ class JialiubSettings {
      */
     public function settingsPage() {
         wp_enqueue_style('jialiub-styles'); ?>
-        <div class="jialiub-container jialiub-container--bg-white">
+        <div class="jialiub-container jialiub-container--bg-white p-4">
             <h1 class="jialiub-heading">
                 <?php echo sprintf(
                     /* translators: %s: Plural label for bookmarks */
@@ -273,6 +273,26 @@ class JialiubSettings {
                 'jialiub-user-bookmarks', 
                 'jialiub_style_settings_section'
             );
+
+            register_setting( 
+                'jialiub_settings_group', 
+                'jialiub_font_size', 
+                [
+                    'type' => 'integer',
+                    'sanitize_callback' => 'absint',
+                    'default' => 14
+                ]
+            );
+
+            add_settings_field(
+                'font_size', 
+                esc_html__('Font Size (px)', 'jiali-user-bookmarks'), 
+                [$this, 'fontSizeCallback'], 
+                'jialiub-user-bookmarks', 
+                'jialiub_style_settings_section'    
+            );
+
+
         }
     }
 
@@ -363,6 +383,28 @@ class JialiubSettings {
         <?php
     }
 
+    // Field Callbacks
+    function buttonColorCallback() {
+        $value = esc_attr(get_option('jialiub_button_color', '#000'));
+        echo '<input type="text" id="jialiub_button_color" class="jialiub-color-field" name="jialiub_button_color" value="' . esc_attr($value) . '">';
+    }
+
+    function buttonHoverColorCallback() {
+        $value = esc_attr(get_option('jialiub_button_hover_color', '#444'));
+        echo '<input type="text" id="jialiub_button_hover_color" class="jialiub-color-field" name="jialiub_button_hover_color" value="' . esc_attr($value) . '">';
+    }
+
+    function buttonActiveColorCallback() {
+        $value = esc_attr(get_option('jialiub_button_active_color', '#000'));
+        echo '<input type="text" id="jialiub_button_active_color" class="jialiub-color-field" name="jialiub_button_active_color" value="' . esc_attr($value) . '">';
+    }   
+
+    // Font Size
+    function fontSizeCallback() {
+        $value = absint( get_option( 'jialiub_font_size' ) ) ?: 14;
+        echo '<input type="number" name="jialiub_font_size" value="' . esc_attr($value) . '" class="small-text" min="10" max="36"> px';
+    }
+
     /**
      * Bookmarked posts report page
      */
@@ -416,22 +458,6 @@ class JialiubSettings {
         <?php    
     }
 
-    // Field Callbacks
-    function buttonColorCallback() {
-        $value = esc_attr(get_option('jialiub_button_color', '#000'));
-        echo '<input type="text" id="jialiub_button_color" class="jialiub-color-field" name="jialiub_button_color" value="' . esc_attr($value) . '">';
-    }
-
-    function buttonHoverColorCallback() {
-        $value = esc_attr(get_option('jialiub_button_hover_color', '#444'));
-        echo '<input type="text" id="jialiub_button_hover_color" class="jialiub-color-field" name="jialiub_button_hover_color" value="' . esc_attr($value) . '">';
-    }
-
-    function buttonActiveColorCallback() {
-        $value = esc_attr(get_option('jialiub_button_active_color', '#000'));
-        echo '<input type="text" id="jialiub_button_active_color" class="jialiub-color-field" name="jialiub_button_active_color" value="' . esc_attr($value) . '">';
-    }   
-
     /**
      * Enqueue dynamic custom styles
      */
@@ -439,11 +465,13 @@ class JialiubSettings {
         $buttonColor = esc_attr(get_option('jialiub_button_color', '#000'));
         $hoverColor = esc_attr(get_option('jialiub_button_hover_color', '#444'));
         $activeColor = esc_attr(get_option('jialiub_button_active_color', '#000'));
+        $fontSize = absint( get_option( 'jialiub_font_size' ) ) ?: 14;
 
         $customCss = "
             .jialiub-bookmark-button { color: {$buttonColor} !important; }
             .jialiub-bookmark-button:hover { color: {$hoverColor} !important; }
             .jialiub-bookmark-button-active { color: {$activeColor} !important; }
+            .jialiub-bookmark { font-size: {$fontSize}px !important; }
         ";
         wp_add_inline_style('jialiub-styles', $customCss);
     }
