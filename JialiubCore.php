@@ -56,12 +56,11 @@ class JialiubCore {
 
         include_once( ABSPATH.'wp-includes/pluggable.php'); // For getting wp_get_current_user and etc. 
         // include_once(JIALIUB_PLUGIN_PATH.'inc/functions.php');
-        include_once(JIALIUB_PLUGIN_PATH.'inc/front.php');
 
         JialiubSettings::getInstance();
         JialiubAjaxFunctions::getInstance();
         JialiubShortcodes::getInstance();
-        
+        JialiubViews::getInstance();
     }
 
     // Start output buffering

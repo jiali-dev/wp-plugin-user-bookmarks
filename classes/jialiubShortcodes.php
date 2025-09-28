@@ -31,7 +31,7 @@ class JialiubShortcodes {
      */
     public function bookmarkButton($atts) {
         global $post;
-        return jialiub_bookmark_button_html($post);
+        return JialiubViews::getInstance()->bookmarkButtonHtml($post);
     }
 
     /**
@@ -39,7 +39,7 @@ class JialiubShortcodes {
      * Usage: [jialiub_user_bookmarks_table]
      */
     public function userBookmarksTable($atts) {
-        return jialiub_render_user_bookmarks_table();
+        return JialiubViews::getInstance()->renderUserBookmarksTable();
     }
 
     /**
@@ -47,6 +47,6 @@ class JialiubShortcodes {
      * Usage: [jialiub_top_bookmarks_table]
      */
     public function topBookmarksTable($atts) {
-        return jialiub_render_top_bookmarks_table();
+        return JialiubViews::getInstance()->renderTopBookmarksTable();
     }
 }

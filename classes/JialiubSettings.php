@@ -373,7 +373,7 @@ class JialiubSettings {
             esc_html__('Your %s Posts', 'jiali-user-bookmarks'),
             esc_html(JIALIUB_ACTION_LABEL)
         ) . "</h2>";
-        echo wp_kses_post(jialiub_render_user_bookmarks_table());
+        echo wp_kses_post(JialiubViews::getInstance()->renderUserBookmarksTable());
         echo "</div>";
 
         if (current_user_can('manage_options')) {
@@ -382,7 +382,7 @@ class JialiubSettings {
                 esc_html__('Top %s Posts', 'jiali-user-bookmarks'),
                 esc_html(JIALIUB_ACTION_LABEL)
             ) . "</h2>";
-            echo wp_kses_post(jialiub_render_top_bookmarks_table());
+            echo wp_kses_post(JialiubViews::getInstance()->renderTopBookmarksTable());
             echo "</div>";
         }
     }

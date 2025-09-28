@@ -112,7 +112,7 @@ class JialiubAjaxFunctions {
                 $data[] = [
                     '<a href="' . get_permalink($post->ID) . '">' . get_the_title($post->ID) . '</a>',
                     get_the_author_meta('display_name', $post->post_author),
-                    jialiub_bookmark_button_html($post, true),
+                    JialiubViews::getInstance()->bookmarkButtonHtml($post, true),
                 ];
             }
 
