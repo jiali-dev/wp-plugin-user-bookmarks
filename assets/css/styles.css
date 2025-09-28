@@ -33,20 +33,13 @@ h4.jialiub-heading {
 
 /* Bookmarks Style */
 .jialiub-bookmark {
-  display: inline-flex;
+  display: flex;
   flex-wrap: wrap;
   gap: 12px;
   align-items: center;
   justify-content: flex-start;
   font-size: inherit;
   color: inherit;
-}
-
-.jialiub-bookmark-block {
-  display: flex;
-  width: 100%;
-  justify-content: flex-start;
-  margin: 1rem 0;
 }
 
 .jialiub-bookmark-button {
