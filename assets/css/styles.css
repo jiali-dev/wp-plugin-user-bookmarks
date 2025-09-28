@@ -1,11 +1,10 @@
 /* General Style */
 .jialiub-container {
-  display: grid;
-  grid-template-columns: 1fr;
-  column-gap: 75px;
-  row-gap: 60px;
-  align-items: start;
-  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  max-width: 1200px;
+  margin: 0 auto;
+  color: #333;
 }
 
 .jialiub-container--bg-white {
@@ -53,10 +52,6 @@ h4.jialiub-heading {
 .jialiub-bookmark span {
   cursor: pointer;
   transition: color 0.3s ease;
-}
-
-.jialiub-bookmark span:hover {
-  color: #e63946; /* Highlight color on hover */
 }
 
 /* Table */

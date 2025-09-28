@@ -62,9 +62,10 @@ add_action('admin_menu', 'jialiub_register_bookmark_menu');
  * Settings Page Output
  */
 function jialiub_settings_page() {
+    wp_enqueue_style( 'jialiub-styles' );
     ?>
-    <div class="wrap">
-        <h1>
+    <div class="jialiub-container jialiub-container--bg-white">
+        <h1 class="jialiub-heading">
             <?php 
                 /* translators: %s: Plural label for bookmarks */
                 echo sprintf( esc_html__('User %s Settings', 'jiali-user-bookmarks'), esc_html(JIALIUB_PLURAL_LABEL) );
@@ -106,7 +107,7 @@ function jialiub_register_settings() {
 
         add_settings_section(
             'jialiub_main_settings_section',
-            esc_html__('Enabled Post Types', 'jiali-user-bookmarks'),
+            esc_html__('Settings', 'jiali-user-bookmarks'),
             '__return_false',
             'jialiub-user-bookmarks'
         );
@@ -192,6 +193,56 @@ function jialiub_register_settings() {
             'jialiub-user-bookmarks',
             'jialiub_main_settings_section'
         );
+
+        add_settings_section(
+            'jialiub_style_settings_section',
+            esc_html__('Custom Styles', 'jiali-user-bookmarks'),
+            '__return_false',
+            'jialiub-user-bookmarks'
+        );
+
+        register_setting(
+            'jialiub_settings_group', 
+            'jialiub_button_color', 
+            'sanitize_hex_color'
+        );
+
+        add_settings_field(
+            'button_color',
+            esc_html__('Button Color', 'jiali-user-bookmarks'), 
+            'jialiub_button_color_callback', 
+            'jialiub-user-bookmarks', 
+            'jialiub_style_settings_section'
+        );
+
+        register_setting(
+            'jialiub_settings_group', 
+            'jialiub_button_hover_color', 
+            'sanitize_hex_color'
+        );
+
+        add_settings_field(
+            'button_hover_color', 
+            esc_html__('Button Hover Color', 'jiali-user-bookmarks'), 
+            'jialiub_button_hover_color_callback', 
+            'jialiub-user-bookmarks', 
+            'jialiub_style_settings_section'
+        );
+
+        register_setting(
+            'jialiub_settings_group', 
+            'jialiub_button_active_color', 
+            'sanitize_hex_color'
+        );
+
+        add_settings_field(
+            'button_active_color', 
+            esc_html__('Button Active Color', 'jiali-user-bookmarks'), 
+            'jialiub_button_active_color_callback', 
+            'jialiub-user-bookmarks', 
+            'jialiub_style_settings_section'
+        );
+    
 
     }
 
@@ -290,6 +341,7 @@ function jialiub_show_label_field() {
  * Bookmark Posts Report Page
  */
 function jialiub_bookmarked_posts_report_page() {
+    wp_enqueue_style( 'jialiub-styles' );
     echo "<div class='jiali-container jialiub-container--bg-white p-4'>";
         echo wp_kses_post(
             sprintf(
@@ -322,5 +374,75 @@ function jialiub_bookmarked_posts_report_page() {
 
 
 }
+
+/**
+ * Shortcode Help Page
+ */
+function jialiub_bookmarks_shortcode_help_page() {
+    wp_enqueue_style( 'jialiub-styles' );
+    ?>
+    <div class="jialiub-container jialiub-container--bg-white p-4">
+        <h1 class="jialiub-heading"><?php esc_html_e('Shortcodes Help', 'jiali-user-bookmarks'); ?></h1>
+        <h2 class="jialiub-heading"><?php esc_html_e('User Bookmarks Shortcode', 'jiali-user-bookmarks'); ?></h2>
+        <p><?php esc_html_e('Use the following shortcode to display the Bookmark Button anywhere — including page builder loops, custom templates, and more.', 'jiali-user-bookmarks'); ?></p>
+        <pre><code>[jialiub_bookmark_button]</code></pre>
+        <p><?php esc_html_e('This shortcode will display a Bookmark Button anywhere on your site.', 'jiali-user-bookmarks'); ?></p>
+
+        <h2 class="jialiub-heading"><?php esc_html_e('User Bookmarks Shortcode', 'jiali-user-bookmarks'); ?></h2>
+        <p><?php esc_html_e('Use the following shortcode to display the current user\'s bookmarked posts:', 'jiali-user-bookmarks'); ?></p>
+        <pre><code>[jialiub_user_bookmarks_table]</code></pre>
+        <p><?php esc_html_e('This shortcode will display a list of posts that the currently logged-in user has bookmarked.', 'jiali-user-bookmarks'); ?></p>
+
+        <h2 class="jialiub-heading"><?php esc_html_e('Top Bookmarks Shortcode', 'jiali-user-bookmarks'); ?></h2>
+        <p><?php esc_html_e('Use the following shortcode to display the most bookmarked posts across all users:', 'jiali-user-bookmarks'); ?></p>
+        <pre><code>[jialiub_top_bookmarks_table]</code></pre>
+        <p><?php esc_html_e('This shortcode will display a list of the most frequently bookmarked posts by all users.', 'jiali-user-bookmarks'); ?></p>
+        
+        <h3 class="jialiub-heading"><?php esc_html_e('Notice: You can use this in all widgets that accept shortcode.', 'jiali-user-bookmarks'); ?></h3>
+
+    </div>
+    <?php               
+}
+
+// Field Callbacks
+function jialiub_button_color_callback() {
+    $value = esc_attr(get_option('jialiub_button_color', '#fff'));
+    echo '<input type="text" id="jialiub_button_color" class="jialiub-color-field" name="jialiub_button_color" value="' . esc_attr($value) . '">';
+}
+
+function jialiub_button_hover_color_callback() {
+    $value = esc_attr(get_option('jialiub_button_hover_color', '#fff'));
+    echo '<input type="text" id="jialiub_button_hover_color" class="jialiub-color-field" name="jialiub_button_hover_color" value="' . esc_attr($value) . '">';
+}
+
+function jialiub_button_active_color_callback() {
+    $value = esc_attr(get_option('jialiub_button_active_color', '#fff'));
+    echo '<input type="text" id="jialiub_button_active_color" class="jialiub-color-field" name="jialiub_button_active_color" value="' . esc_attr($value) . '">';
+}
+
+// Enqueue dynamic custom styles
+function jialiub_enqueue_styles() {
+    $button_color = esc_attr(get_option('jialiub_button_color', '#fff'));
+    $button_hover_color = esc_attr(get_option('jialiub_button_hover_color', '#fff'));
+    $button_active_color = esc_attr(get_option('jialiub_button_active_color', '#fff'));
+    
+    $custom_css = "
+        .jialiub-bookmark-button {
+            color: {$button_color} !important;
+        }
+
+        .jialiub-bookmark-button:hover {
+            color: {$button_hover_color} !important;
+        }
+
+        .jialiub-bookmark-button-active {
+            color: {$button_active_color} !important;
+        }
+    ";
+
+    wp_add_inline_style('jialiub-styles', $custom_css);
+}
+add_action('wp_enqueue_scripts', 'jialiub_enqueue_styles');
+add_action('admin_enqueue_scripts', 'jialiub_enqueue_styles');
 
 ?>

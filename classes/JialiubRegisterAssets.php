@@ -41,10 +41,10 @@ class JialiubRegisterAssets {
     } 
 
     public static function adminRegisterAssets() {
-
+        wp_enqueue_style('wp-color-picker');
+        wp_enqueue_script('jialiub-color-picker', esc_url(JIALIUB_ASSETS_URI . '/js/admin-color-picker.js'), ['wp-color-picker'], '1.0.0', true);
         // It is neede for this project
         self::registerAssets();
-        
     }
     
 }
