@@ -46,7 +46,7 @@ jQuery(function ($) {
             .removeClass("fa-regular")
             .addClass("fa-solid");
         }
-        el.find('.jialiub-bookmark-count').html(
+        el?.find('.jialiub-bookmark-count').html(
           response.bookmarks_count > 0 ? `(${response.bookmarks_count})` : ""
         );
         el?.find('.jialiub-bookmark-label').html(

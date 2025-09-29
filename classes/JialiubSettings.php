@@ -225,6 +225,27 @@ class JialiubSettings {
                 'jialiub_main_settings_section'
             );
 
+            register_setting(
+                'jialiub_settings_group', 
+                'jialiub_show_count', 
+                [
+                    'type' => 'boolean',
+                    'default' => true,
+                    'sanitize_callback' => function( $value ) {
+                        return (bool) $value;
+                    },  
+                    'capability' => 'manage_options',
+                ]
+            );
+            
+            add_settings_field(
+                'jialiub_show_count',
+                esc_html__('Show Count', 'jiali-user-bookmarks'),
+                [$this, 'showCountField'],
+                'jialiub-user-bookmarks',
+                'jialiub_main_settings_section'
+            );
+
             add_settings_section(
                 'jialiub_style_settings_section',
                 esc_html__('Custom Styles', 'jiali-user-bookmarks'),
@@ -379,6 +400,17 @@ class JialiubSettings {
         <label>
             <input type="checkbox" name="jialiub_show_label" value="1" <?php checked($value, true); ?>>
             <?php esc_html_e('Show label next to icon/button', 'jiali-user-bookmarks'); ?>
+        </label>
+        <?php
+    }
+
+    // Callback for field
+    function showCountField() {
+        $value = get_option('jialiub_show_count', true);
+        ?>
+        <label>
+            <input type="checkbox" name="jialiub_show_count" value="1" <?php checked($value, true); ?>>
+            <?php esc_html_e('Show count next to icon/button', 'jiali-user-bookmarks'); ?>
         </label>
         <?php
     }

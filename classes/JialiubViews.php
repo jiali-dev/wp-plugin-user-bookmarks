@@ -65,12 +65,14 @@ class JialiubViews {
                                 <?php echo esc_html( $bookmarks_exist ? JIALIUB_ACTION_LABEL : JIALIUB_SINGULAR_LABEL ); ?>
                             </span>
                         <?php endif; ?>
-                        <span class="jialiub-bookmark-count">
-                            <?php 
-                                $bookmarks_count = JialiubBookmarkFunctions::getInstance()->getPostBookmarksCount( $post->ID );
-                                echo esc_html( $bookmarks_count > 0 ? "($bookmarks_count)" : '' ); 
-                            ?>
-                        </span>
+                        <?php if ( (bool) get_option('jialiub_show_count', true) ): ?>
+                            <span class="jialiub-bookmark-count">
+                                <?php 
+                                    $bookmarks_count = JialiubBookmarkFunctions::getInstance()->getPostBookmarksCount( $post->ID );
+                                    echo esc_html( $bookmarks_count > 0 ? "($bookmarks_count)" : '' ); 
+                                ?>
+                            </span>
+                        <?php endif; ?>
                     <?php endif; ?>
                 </span>
             <?php endif; ?>
