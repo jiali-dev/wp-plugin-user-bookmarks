@@ -31,7 +31,7 @@ jQuery(function ($) {
         if( xhr?.responseJSON?.message ) {
           Notiflix.Notify.failure(xhr?.responseJSON?.message);
         } else {
-          Notiflix.Notify.failure('An error occurred. Please try again.');
+          Notiflix.Notify.failure(jialiub_translate_handler.error_occurred);
         }
       },
       success: function (response) {
