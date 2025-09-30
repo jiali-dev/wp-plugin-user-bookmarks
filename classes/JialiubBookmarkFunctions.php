@@ -164,24 +164,22 @@ class JialiubBookmarkFunctions {
             $result =  $this->removeBookmark($user_id, $post_id);
 
             if( $result ) {
-                $bookmarks_count = $this->getPostBookmarksCount($post_id);
-                $bookmarks_count--;
+                $bookmarks_count = (int) $this->getPostBookmarksCount($post_id);
+                $bookmarks_count = max(0, $bookmarks_count - 1);
                 update_post_meta($post_id, 'jialiub_bookmarks_count', $bookmarks_count);
     
-                $user_bookmarks_count = $this->getUserBookmarksCount($user_id);
-                $user_bookmarks_count--;
+                $user_bookmarks_count = (int) $this->getUserBookmarksCount($user_id);
+                $user_bookmarks_count = max(0, $user_bookmarks_count - 1);
                 update_user_meta($user_id, 'jialiub_bookmarks_count', $user_bookmarks_count);
             }
         } else {
             $result =  $this->addBookmark($user_id, $post_id);
 
             if( $result ) {
-                $bookmarks_count = $this->getPostBookmarksCount($post_id);
-                $bookmarks_count++;
+                $bookmarks_count = (int) $this->getPostBookmarksCount($post_id) + 1;
                 update_post_meta($post_id, 'jialiub_bookmarks_count', $bookmarks_count);
 
-                $user_bookmarks_count = $this->getUserBookmarksCount($user_id);
-                $user_bookmarks_count++;
+                $user_bookmarks_count = (int) $this->getUserBookmarksCount($user_id) + 1;
                 update_user_meta($user_id, 'jialiub_bookmarks_count', $user_bookmarks_count);
             }
             
