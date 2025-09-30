@@ -29,7 +29,7 @@ class JialiubAjaxFunctions {
     private function verifyNonce() {
         $nonce = isset($_POST['nonce']) ? sanitize_text_field(wp_unslash($_POST['nonce'])) : '';
         if (empty($nonce) || !wp_verify_nonce($nonce, 'jialiub-nonce')) {
-            throw new Exception(__('Security error!', 'jiali-user-bookmarks'), 403);
+            throw new Exception(esc_html__('Security error!', 'jiali-user-bookmarks'), 403);
         }
     }
 
@@ -39,20 +39,20 @@ class JialiubAjaxFunctions {
             $this->verifyNonce();
 
             if (!is_user_logged_in()) {
-                throw new Exception(__('You must be logged in to perform this action!', 'jiali-user-bookmarks'), 403);
+                throw new Exception(esc_html__('You must be logged in to perform this action!', 'jiali-user-bookmarks'), 403);
             }
 
             $user_id = get_current_user_id();
 
             if (empty($_POST['post_id'])) {
-                throw new Exception(__('Post ID is not set!', 'jiali-user-bookmarks'), 403);
+                throw new Exception(esc_html__('Post ID is not set!', 'jiali-user-bookmarks'), 403);
             }
 
             $post_id   = intval($_POST['post_id']);
             $post_type = get_post_type($post_id);
             $enabled_types = get_option('jialiub_bookmark_enabled_post_types', []);
             if (is_array($enabled_types) && !in_array($post_type, $enabled_types)) {
-                throw new Exception(__('This post type is not enabled for this action!', 'jiali-user-bookmarks'), 403);
+                throw new Exception(esc_html__('This post type is not enabled for this action!', 'jiali-user-bookmarks'), 403);
             }
 
             // In the future it will come from $_POST and check if it is set or not
@@ -79,7 +79,7 @@ class JialiubAjaxFunctions {
 
                 wp_send_json($data);
             } else {
-                throw new Exception(__('An unknown error occurred, try again!', 'jiali-user-bookmarks'), 403);
+                throw new Exception(esc_html__('An unknown error occurred, try again!', 'jiali-user-bookmarks'), 403);
             }
         } catch (Exception $ex) {
             wp_send_json(['message' => $ex->getMessage()], $ex->getCode() ?: 403);

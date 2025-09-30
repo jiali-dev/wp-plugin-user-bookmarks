@@ -154,7 +154,7 @@ class JialiubSettings {
                 [
                     'type' => 'string',
                     /* translators: %s: Singular label for bookmarks */
-                    'default' => sprintf( esc_html__('%s', 'jiali-user-bookmarks'), JIALIUB_SINGULAR_LABEL ),
+                    'default' => JIALIUB_SINGULAR_LABEL,
                     'sanitize_callback' => 'sanitize_text_field',
                     'capability' => 'manage_options',
                 ]
@@ -174,7 +174,7 @@ class JialiubSettings {
                 [
                     'type' => 'string',
                     /* translators: %s: Plural label for bookmarks */
-                    'default' => sprintf( esc_html__('%s', 'jiali-user-bookmarks'), JIALIUB_PLURAL_LABEL ),
+                    'default' => JIALIUB_PLURAL_LABEL,
                     'sanitize_callback' => 'sanitize_text_field',
                     'capability' => 'manage_options',
                 ]
@@ -194,7 +194,7 @@ class JialiubSettings {
                 [
                     'type' => 'string',
                     /* translators: %s: Action label for bookmarks */
-                    'default' => sprintf( esc_html__('%s', 'jiali-user-bookmarks'), JIALIUB_ACTION_LABEL ),
+                    'default' => JIALIUB_ACTION_LABEL,
                     'sanitize_callback' => 'sanitize_text_field',
                     'capability' => 'manage_options',
                 ]
@@ -443,8 +443,8 @@ class JialiubSettings {
     public function bookmarkedPostsReportPage() {
         wp_enqueue_style('jialiub-styles');
         echo "<div class='jialiub-container jialiub-container--bg-white p-4'>";
-        /* translators: %s: Action label for bookmarks */
         echo "<h2 class='jialiub-heading'>" . sprintf(
+            /* translators: %s: Action label for bookmarks */
             esc_html__('Your %s Posts', 'jiali-user-bookmarks'),
             esc_html(JIALIUB_ACTION_LABEL)
         ) . "</h2>";
@@ -453,8 +453,8 @@ class JialiubSettings {
 
         if (current_user_can('manage_options')) {
             echo "<div class='jialiub-container jialiub-container--bg-white p-4'>";
-            /* translators: %s: Action label for bookmarks */
             echo "<h2 class='jialiub-heading'>" . sprintf(
+                /* translators: %s: Action label for bookmarks */
                 esc_html__('Top %s Posts', 'jiali-user-bookmarks'),
                 esc_html(JIALIUB_ACTION_LABEL)
             ) . "</h2>";
