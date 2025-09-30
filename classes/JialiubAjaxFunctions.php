@@ -50,13 +50,17 @@ class JialiubAjaxFunctions {
 
             $post_id   = intval($_POST['post_id']);
             $post_type = get_post_type($post_id);
-
             $enabled_types = get_option('jialiub_bookmark_enabled_post_types', []);
             if (is_array($enabled_types) && !in_array($post_type, $enabled_types)) {
                 throw new Exception(__('This post type is not enabled for this action!', 'jiali-user-bookmarks'), 403);
             }
 
-            $result = JialiubBookmarkFunctions::getInstance()->toggleBookmark($user_id, $post_id);
+            // In the future it will come from $_POST and check if it is set or not
+            $bookmark_category_id = JialiubBookmarkFunctions::getInstance()->userDefaultBookmarkCategoryID($user_id);
+
+            $data = [];
+
+            $result = JialiubBookmarkFunctions::getInstance()->toggleBookmark($user_id, $post_id, $bookmark_category_id);
 
             if (!is_wp_error($result)) {
                 $data['bookmark_exist']  = JialiubBookmarkFunctions::getInstance()->bookmarkExists($user_id, $post_id); 

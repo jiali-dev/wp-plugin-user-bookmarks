@@ -19,14 +19,14 @@ class JialiubDatabaseInstaller {
             user_id mediumint(9) NOT NULL,
             post_id mediumint(9) NOT NULL,
             category_id mediumint(9) DEFAULT NULL,
-            date_added DATETIME NOT NULL,
-            date_added_gmt DATETIME NOT NULL,
+            created_at DATETIME NOT NULL,
+            created_at_gmt DATETIME NOT NULL,
             PRIMARY KEY  (id),
             KEY user_id (user_id),
             KEY post_id (post_id),
             KEY category_id (category_id),
-            KEY date_added (date_added),
-            KEY date_added_gmt (date_added_gmt)
+            KEY created_at (created_at),
+            KEY created_at_gmt (created_at_gmt)
         ) $charset_collate;";
 
         // Bookmarks Categories Table
@@ -36,9 +36,9 @@ class JialiubDatabaseInstaller {
             name varchar(100) NOT NULL,
             user_id mediumint(9) NOT NULL,
             is_default tinyint(1) NOT NULL DEFAULT 0,
-            isprivate tinyint(1) NOT NULL DEFAULT 0,
-            date_added DATETIME NOT NULL,
-            date_added_gmt DATETIME NOT NULL,
+            is_private tinyint(1) NOT NULL DEFAULT 0,
+            created_at DATETIME NOT NULL,
+            created_at_gmt DATETIME NOT NULL,
             PRIMARY KEY  (id),
             KEY user_id (user_id)
         ) $charset_collate;";
