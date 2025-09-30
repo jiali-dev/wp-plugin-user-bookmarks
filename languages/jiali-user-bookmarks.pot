@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Jiali User Bookmarks\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-09-29 12:30+0000\n"
+"POT-Creation-Date: 2025-09-30 11:54+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: \n"
@@ -45,7 +45,7 @@ msgstr ""
 msgid "An error occurred. Please try again."
 msgstr ""
 
-#: classes/JialiubAjaxFunctions.php:77
+#: classes/JialiubAjaxFunctions.php:82
 msgid "An unknown error occurred, try again!"
 msgstr ""
 
@@ -96,6 +96,10 @@ msgstr ""
 msgid "Custom Styles"
 msgstr ""
 
+#: classes/JialiubBookmarkFunctions.php:222
+msgid "Default"
+msgstr ""
+
 #: classes/JialiubSettings.php:368 classes/JialiubSettings.php:380
 #: classes/JialiubSettings.php:392
 msgid "E.g. Bookmark, Favorite, Item"
@@ -133,7 +137,7 @@ msgstr ""
 msgid "Mahyar Rad"
 msgstr ""
 
-#: classes/JialiubSettings.php:487
+#: classes/JialiubSettings.php:489
 msgid "Notice: You can use this in all widgets that accept shortcode."
 msgstr ""
 
@@ -141,7 +145,7 @@ msgstr ""
 msgid "Plural Label"
 msgstr ""
 
-#: classes/JialiubAjaxFunctions.php:47
+#: classes/JialiubAjaxFunctions.php:48
 msgid "Post ID is not set!"
 msgstr ""
 
@@ -158,7 +162,7 @@ msgstr ""
 msgid "Settings"
 msgstr ""
 
-#: classes/JialiubSettings.php:471
+#: classes/JialiubSettings.php:473
 msgid "Shortcodes Help"
 msgstr ""
 
@@ -190,17 +194,17 @@ msgstr ""
 msgid "This post type is not enabled for this action!"
 msgstr ""
 
-#: classes/JialiubSettings.php:475
+#: classes/JialiubSettings.php:477
 msgid "This shortcode will display a Bookmark Button anywhere on your site."
 msgstr ""
 
-#: classes/JialiubSettings.php:480
+#: classes/JialiubSettings.php:482
 msgid ""
 "This shortcode will display a list of posts that the currently logged-in "
 "user has bookmarked."
 msgstr ""
 
-#: classes/JialiubSettings.php:485
+#: classes/JialiubSettings.php:487
 msgid ""
 "This shortcode will display a list of the most frequently bookmarked posts "
 "by all users."
@@ -212,27 +216,28 @@ msgstr ""
 msgid "Title"
 msgstr ""
 
-#: classes/JialiubSettings.php:456
+#. %s: Action label for bookmarks
+#: classes/JialiubSettings.php:458
 #, php-format
 msgid "Top %s Posts"
 msgstr ""
 
-#: classes/JialiubSettings.php:482
+#: classes/JialiubSettings.php:484
 msgid "Top Bookmarks Shortcode"
 msgstr ""
 
-#: classes/JialiubSettings.php:473
+#: classes/JialiubSettings.php:475
 msgid ""
 "Use the following shortcode to display the Bookmark Button anywhere — "
 "including page builder loops, custom templates, and more."
 msgstr ""
 
-#: classes/JialiubSettings.php:478
+#: classes/JialiubSettings.php:480
 msgid ""
 "Use the following shortcode to display the current user's bookmarked posts:"
 msgstr ""
 
-#: classes/JialiubSettings.php:483
+#: classes/JialiubSettings.php:485
 msgid ""
 "Use the following shortcode to display the most bookmarked posts across all "
 "users:"
@@ -250,15 +255,16 @@ msgstr ""
 msgid "User %s Settings"
 msgstr ""
 
-#: classes/JialiubSettings.php:472 classes/JialiubSettings.php:477
+#: classes/JialiubSettings.php:474 classes/JialiubSettings.php:479
 msgid "User Bookmarks Shortcode"
 msgstr ""
 
-#: classes/JialiubAjaxFunctions.php:41
+#: classes/JialiubAjaxFunctions.php:42
 msgid "You must be logged in to perform this action!"
 msgstr ""
 
-#: classes/JialiubSettings.php:447
+#. %s: Action label for bookmarks
+#: classes/JialiubSettings.php:448
 #, php-format
 msgid "Your %s Posts"
 msgstr ""
