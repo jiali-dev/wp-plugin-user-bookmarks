@@ -1,54 +1,61 @@
 === Jiali User Bookmarks ===
-Contributors: mrgrad  
-Tags: user bookmarks, bookmark posts, UX  
-Requires at least: 5.0  
-Tested up to: 6.8  
-Requires PHP: 7.2  
-Stable tag: 1.0.0  
-License: GPLv2 or later  
-License URI: https://www.gnu.org/licenses/gpl-2.0.html  
+Contributors: mrgrad
+Tags: bookmarks, user favorites, save posts, reading list, ajax
+Requires at least: 5.0
+Tested up to: 6.8
+Requires PHP: 7.2
+Stable tag: 1.0.0
+License: GPLv2 or later
+License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
-Let your visitors easily bookmark posts! Lightweight, AJAX-powered plugin to enhance user engagement and interactivity. 📑✨
+Let your visitors easily bookmark posts! Lightweight, AJAX-powered plugin to boost user engagement and interactivity. 📑✨
 
-== Description ==  
-**Jiali User Bookmarks** is a simple, AJAX-powered WordPress plugin that allows users to "Bookmark" posts. It provides an easy way for users to save content for later viewing—all without refreshing the page.
+== Description ==
+**Jiali User Bookmarks** is a lightweight and developer-friendly WordPress plugin that allows users to save ("bookmark") posts for later reading.  
+It’s fully AJAX-powered for a seamless user experience — no page reloads required.
 
-### **🚀 Features:**  
-– 📑 Add Bookmark button to posts  
-– ⚡ AJAX-powered for seamless user interaction  
-– 🔐 Logged-in user support for personalized bookmarking  
-– 📊 Display bookmark count per post  
-– 🧩 Shortcode and PHP function support for flexible placement  
-– 🧼 Lightweight and developer-friendly
+Perfect for blogs, news sites, tutorials, or any content-rich site where readers may want to come back to specific articles later.
 
-== Installation ==  
-1. Upload the plugin files to the `/wp-content/plugins/jiali-user-bookmarks/` directory or install via WordPress Plugin Installer.  
-2. Activate the plugin through the ‘Plugins’ menu in WordPress.  
-3. Configure styles or placement if needed (shortcodes, hooks, or template integration).
+### 🚀 Features
+- 📑 **One-click Bookmark button** for posts  
+- ⚡ **AJAX-powered** (no page reloads)  
+- 🔐 Works only for **logged-in users** (for personalization & security)  
+- 📊 **Show bookmark counts** anywhere (shortcode or function)  
+- 🧩 **Shortcode support** for easy placement in page builders, templates, or loops  
+- 🧼 Lightweight, extendable, and **developer-friendly** (uses WordPress standards)  
 
-== Frequently Asked Questions ==  
+### 🛠️ Developer Notes
+- Coded with WordPress best practices (escaping, nonce validation, cache support)  
+- Compatible with block themes and classic themes  
 
-= Do users need to be logged in to bookmark a post? =  
-Yes, only logged-in users can bookmark posts to ensure personalization and prevent spam.
+== Installation ==
+1. Upload the plugin files to the `/wp-content/plugins/jiali-user-bookmarks/` directory, or install via the **WordPress Plugin Installer**.  
+2. Activate the plugin through the **Plugins** menu in WordPress.  
+3. Use the provided shortcodes or PHP functions to display the bookmark button or tables.  
 
-= Can I show the bookmark count? =  
-Yes! You can display the bookmark count for each post anywhere in your theme using the provided shortcode or PHP functions.
+== Frequently Asked Questions ==
 
-= Is the plugin AJAX-based? =  
-Yes. All actions (bookmarking) happen asynchronously without page reloads.
+= Do users need to be logged in to bookmark a post? =
+Yes. Only logged-in users can bookmark posts to ensure personalization and prevent spam.
 
-== Changelog ==  
+= Can I show the bookmark count? =
+Yes! The plugin provides options and shortcodes to display counts per post.
 
-= 1.0.0 =  
-– Initial release with bookmark functionality  
+= Does it support AJAX? =
+Yes. All actions are AJAX-based for a smooth, instant experience.
 
-== Upgrade Notice ==  
+== Changelog ==
 
-= 1.0.0 =  
-First release with user engagement features  
+= 1.0.0 =
+* Initial release with bookmark button, AJAX toggle, user bookmarks table, and top bookmarks table.
 
-== Credits ==  
-Developed by **[Mahyar Rad](https://mahyarerad.com)**  
+== Upgrade Notice ==
 
-== License ==  
-This plugin is licensed under GPLv2 or later.  
+= 1.0.0 =
+First release with bookmark functionality.
+
+== Credits ==
+Developed by [Mahyar Rad](https://mahyarerad.com)
+
+== License ==
+This plugin is licensed under GPLv2 or later.
