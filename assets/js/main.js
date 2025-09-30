@@ -2,59 +2,47 @@ jQuery(function ($) {
   "use strict";
 
   $(document).on("click", ".jialiub-bookmark-button", function (e) {
-
     e.preventDefault();
 
     // Get current element
     let el = $(this);
-
     // Get wrapper
     let wrapper = $(this).closest(".jialiub-bookmark");
-
     // Get post ID
     let post_id = wrapper.data("post-id");
 
-    $.ajaxSetup({ cache: false });
+    if (!post_id) {
+      console.warn("No post ID found for bookmark button.");
+      return;
+    }
 
     $.ajax({
       type: "POST",
       url: jialiub_ajax.ajaxurl,
       data: {
         nonce: jialiub_ajax.nonce,
-        post_id: post_id,
+        post_id,
         action: "jialiub_bookmark_toggle_ajax",
       },
-      beforeSend: function () {
-        // Something before send;
-      },
       error: function (xhr) {
-        if( xhr?.responseJSON?.message ) {
-          Notiflix.Notify.failure(xhr?.responseJSON?.message);
-        } else {
-          Notiflix.Notify.failure(jialiub_translate_handler.error_occurred);
-        }
+        const msg =
+          xhr?.responseJSON?.message ||
+          jialiub_translate_handler.error_occurred;
+        Notiflix.Notify.failure(msg);
       },
       success: function (response) {
-        if (response.bookmark_exist !== true) {
-          el.removeClass("jialiub-bookmark-button-active");
-          el.find(".jialiub-icon")
-            .removeClass("fa-solid")
-            .addClass("fa-regular");
-        } else {
-          el.addClass("jialiub-bookmark-button-active");
-          el.find(".jialiub-icon")
-            .removeClass("fa-regular")
-            .addClass("fa-solid");
-        }
-        el?.find('.jialiub-bookmark-count').html(
-          response.bookmarks_count > 0 ? `(${response.bookmarks_count})` : ""
+        const { bookmark_exist, bookmarks_count, bookmarks_label } = response;
+
+        el.toggleClass("jialiub-bookmark-button-active", !!bookmark_exist);
+        el.find(".jialiub-icon")
+          .toggleClass("fa-solid", !!bookmark_exist)
+          .toggleClass("fa-regular", !bookmark_exist);
+
+        el.find(".jialiub-bookmark-count").html(
+          bookmarks_count > 0 ? `(${bookmarks_count})` : ""
         );
-        el?.find('.jialiub-bookmark-label').html(
-         `${response.bookmarks_label}`
-        );
-      },
-      complete: function () {
-        // Something after complete;
+
+        el.find(".jialiub-bookmark-label").html(bookmarks_label || "");
       },
     });
   });

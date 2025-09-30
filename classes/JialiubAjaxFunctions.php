@@ -35,6 +35,7 @@ class JialiubAjaxFunctions {
 
     public function toggleBookmark() {
         try {
+            // Nonce Verification
             $this->verifyNonce();
 
             if (!is_user_logged_in()) {

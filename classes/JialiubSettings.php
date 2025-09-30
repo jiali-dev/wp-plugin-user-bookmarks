@@ -29,7 +29,7 @@ class JialiubSettings {
     public function addPluginSettingsLink($links) {
         if (!current_user_can('manage_options')) return $links;
         $url = esc_url(admin_url('admin.php?page=jialiub_settings'));
-        $text = esc_html__('Settings', 'jiali-user-bookmarks');
+        $text = __('Settings', 'jiali-user-bookmarks');
         $settingsLink = '<a href="' . $url . '">' . $text . '</a>';
         array_unshift($links, $settingsLink);
         return $links;
@@ -443,6 +443,7 @@ class JialiubSettings {
     public function bookmarkedPostsReportPage() {
         wp_enqueue_style('jialiub-styles');
         echo "<div class='jialiub-container jialiub-container--bg-white p-4'>";
+        /* translators: %s: Action label for bookmarks */
         echo "<h2 class='jialiub-heading'>" . sprintf(
             esc_html__('Your %s Posts', 'jiali-user-bookmarks'),
             esc_html(JIALIUB_ACTION_LABEL)
@@ -452,6 +453,7 @@ class JialiubSettings {
 
         if (current_user_can('manage_options')) {
             echo "<div class='jialiub-container jialiub-container--bg-white p-4'>";
+            /* translators: %s: Action label for bookmarks */
             echo "<h2 class='jialiub-heading'>" . sprintf(
                 esc_html__('Top %s Posts', 'jiali-user-bookmarks'),
                 esc_html(JIALIUB_ACTION_LABEL)
