@@ -29,7 +29,7 @@ class JialiubSettings {
     public function addPluginSettingsLink($links) {
         if (!current_user_can('manage_options')) return $links;
         $url = esc_url(admin_url('admin.php?page=jialiub_settings'));
-        $text = esc_html__('Settings', 'jiali-user-bookmarks');
+        $text = __('Settings', 'jiali-user-bookmarks');
         $settingsLink = '<a href="' . $url . '">' . $text . '</a>';
         array_unshift($links, $settingsLink);
         return $links;
@@ -225,6 +225,27 @@ class JialiubSettings {
                 'jialiub_main_settings_section'
             );
 
+            register_setting(
+                'jialiub_settings_group', 
+                'jialiub_show_count', 
+                [
+                    'type' => 'boolean',
+                    'default' => true,
+                    'sanitize_callback' => function( $value ) {
+                        return (bool) $value;
+                    },  
+                    'capability' => 'manage_options',
+                ]
+            );
+            
+            add_settings_field(
+                'jialiub_show_count',
+                esc_html__('Show Count', 'jiali-user-bookmarks'),
+                [$this, 'showCountField'],
+                'jialiub-user-bookmarks',
+                'jialiub_main_settings_section'
+            );
+
             add_settings_section(
                 'jialiub_style_settings_section',
                 esc_html__('Custom Styles', 'jiali-user-bookmarks'),
@@ -383,6 +404,17 @@ class JialiubSettings {
         <?php
     }
 
+    // Callback for field
+    function showCountField() {
+        $value = get_option('jialiub_show_count', true);
+        ?>
+        <label>
+            <input type="checkbox" name="jialiub_show_count" value="1" <?php checked($value, true); ?>>
+            <?php esc_html_e('Show count next to icon/button', 'jiali-user-bookmarks'); ?>
+        </label>
+        <?php
+    }
+
     // Field Callbacks
     function buttonColorCallback() {
         $value = esc_attr(get_option('jialiub_button_color', '#000'));
@@ -411,6 +443,7 @@ class JialiubSettings {
     public function bookmarkedPostsReportPage() {
         wp_enqueue_style('jialiub-styles');
         echo "<div class='jialiub-container jialiub-container--bg-white p-4'>";
+        /* translators: %s: Action label for bookmarks */
         echo "<h2 class='jialiub-heading'>" . sprintf(
             esc_html__('Your %s Posts', 'jiali-user-bookmarks'),
             esc_html(JIALIUB_ACTION_LABEL)
@@ -420,6 +453,7 @@ class JialiubSettings {
 
         if (current_user_can('manage_options')) {
             echo "<div class='jialiub-container jialiub-container--bg-white p-4'>";
+            /* translators: %s: Action label for bookmarks */
             echo "<h2 class='jialiub-heading'>" . sprintf(
                 esc_html__('Top %s Posts', 'jiali-user-bookmarks'),
                 esc_html(JIALIUB_ACTION_LABEL)

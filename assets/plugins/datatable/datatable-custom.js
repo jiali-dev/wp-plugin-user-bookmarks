@@ -12,7 +12,11 @@ jQuery(function ($) {
         d.nonce = jialiub_ajax.nonce;
       },
     },
-    columns: [{ title: "Title" }, { title: "Author" }, { title: "Action" }],
+    columns: [
+      { title: jialiub_translate_handler.title },
+      { title: jialiub_translate_handler.author },
+      { title: jialiub_translate_handler.actions },
+    ],
     pageLength: 10,
     lengthChange: false,
     responsive: true,
@@ -36,7 +40,11 @@ jQuery(function ($) {
         d.nonce = jialiub_ajax.nonce;
       },
     },
-    columns: [{ title: "Title" }, { title: "Author" }, { title: "Count" }],
+    columns: [
+      { title: jialiub_translate_handler.title },
+      { title: jialiub_translate_handler.author },
+      { title: jialiub_translate_handler.count },
+    ],
     pageLength: 10,
     lengthChange: false,
     responsive: true,
