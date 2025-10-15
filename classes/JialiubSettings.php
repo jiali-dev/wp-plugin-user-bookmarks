@@ -118,6 +118,14 @@ class JialiubSettings {
                 [
                     'type' => 'array',
                     'capability' => 'manage_options',
+                    'sanitize_callback' => function( $input ) {
+                        if ( ! is_array( $input ) ) {
+                            return [];
+                        }
+                        $allowed_post_types = get_post_types( [ 'public' => true ], 'names' );
+                        $sanitized = array_intersect( $input, $allowed_post_types );
+                        return array_values( $sanitized );
+                    },
                 ]
             );
 
@@ -137,6 +145,10 @@ class JialiubSettings {
                     'type' => 'string',
                     'default' => 'after',
                     'capability' => 'manage_options',
+                    'sanitize_callback' => function( $value ) {
+                        $allowed = [ 'before', 'after' ];
+                        return in_array( $value, $allowed, true ) ? $value : 'after';
+                    },
                 ]
             );
 
