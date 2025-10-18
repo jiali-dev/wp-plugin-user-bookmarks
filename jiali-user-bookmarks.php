@@ -2,7 +2,6 @@
 
 /**
  * Plugin Name: Jiali User Bookmarks
- * Plugin URI: https://mahyarerad.com
  * Description: Let your users easily bookmark posts. Lightweight, AJAX-based, and perfect for saving content they love.
  * Version: 1.0.0
  * Author: Mahyar Rad
